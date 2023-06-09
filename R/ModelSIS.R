@@ -1,0 +1,57 @@
+#' SIS model
+#' 
+#' Susceptible-Infected-Susceptible model (SIS) ([wiki](https://en.wikipedia.org/w/index.php?title=Compartmental_models_in_epidemiology&oldid=1155757336#The_SIS_model))
+#'
+#' @param name String. Name of the virus.
+#' @param prevalence Double. Initial proportion of individuals with the virus.
+#' @param infectiousness Numeric scalar between 0 and 1. Virus's rate of 
+#' infection.
+#' @param recovery Numeric scalar between 0 and 1. Rate of recovery from virus. 
+#' @param x Object of class SIS. 
+#' @param ... Currently ignore. 
+#' @export
+#' @family Models
+#' @returns 
+#' - The `ModelSIS` function returns a model of class [epiworld_model].
+#' @aliases epiworld_sis
+#' @examples 
+#' model_sis <- ModelSIS(name = "COVID-19", prevalence = 0.01, 
+#'                      infectiousness = 0.9, recovery = 0.1)
+#' 
+#' # Adding a small world population
+#' agents_smallworld(
+#'   model_sis,
+#'   n = 1000,
+#'   k = 5,
+#'   d = FALSE,
+#'   p = .01
+#'   )
+#'   
+#' # Running and printing
+#' run(model_sis, ndays = 100, seed = 1912)
+#' model_sis
+#' 
+#' # Plotting
+#' plot(model_sis, main = "SIS Model")
+#' 
+#' @seealso epiworld-methods
+ModelSIS <- function(
+    name, prevalence, infectiousness, recovery) {
+  
+  structure(
+    ModelSIS_cpp(name, prevalence, infectiousness, recovery),
+    class = c("epiworld_sis", "epiworld_model")
+  )
+  
+}
+
+
+#' @rdname ModelSIS
+#' @export
+#' @returns 
+#' - The `plot` function returns a plot of the SIS model of class 
+#' [epiworld_model].
+#' @param main Title of the plot.
+plot.epiworld_sis <- function(x, main = get_name(x),...) { # col = NULL
+ plot_epi(x, main = main, ...)
+}
