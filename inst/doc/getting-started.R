@@ -9,19 +9,28 @@ knitr::opts_chunk$set(
 library(epiworldR)
 model_sir <- ModelSIRCONN(
   name              = "COVID-19",
-  n                 = 100000, 
+  n                 = 50000, 
   prevalence        = 0.0001, 
   contact_rate      = 2,
-  prob_transmission = 0.5,
-  prob_recovery     = 1/3
+  transmission_rate = 0.5,
+  recovery_rate     = 1/3
   )
 
-## -----------------------------------------------------------------------------
+# Printing the model
 model_sir
+
+## ----summary-method-----------------------------------------------------------
+summary(model_sir)
 
 ## -----------------------------------------------------------------------------
 run(model_sir, ndays = 50, seed = 1912)
-model_sir
+summary(model_sir)
+
+## ----getting-totals, echo=FALSE-----------------------------------------------
+initials <- get_hist_total(model_sir)[1:3,]$counts |> prettyNum(big.mark = ",")
+finals   <- get_today_total(model_sir) |> prettyNum(big.mark = ",")
+tmat     <- get_transition_probability(model_sir)
+tmat     <- round(tmat, digits = 2)
 
 ## ----showing-methods----------------------------------------------------------
 methods(class = "epiworld_model")
@@ -38,6 +47,7 @@ head(repnum)
 
 ## -----------------------------------------------------------------------------
 x <- plot(repnum, type = "b")
+subset(x, date == 10) # Reproductive number on day 10
 
 ## -----------------------------------------------------------------------------
 plot_incidence(model_sir)
@@ -80,7 +90,7 @@ run(model_sir, ndays = 50, seed = 1231)
 repnum3 <- get_reproductive_number(model_sir)
 
 op <- par(mfrow = c(2,1))
-plot(model_sir)
+plot_incidence(model_sir)
 plot(repnum3, type="b")
 par(op)
 
