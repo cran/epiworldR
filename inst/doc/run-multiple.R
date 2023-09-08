@@ -22,7 +22,7 @@ model_seirconn <- ModelSEIRCONN(
 # Generating a saver
 saver <- make_saver("total_hist", "reproductive")
 # Running and printing
-run_multiple(model_seirconn, ndays = 50, nsims = 50, saver = saver, nthread = 2)
+run_multiple(model_seirconn, ndays = 50, nsims = 50, saver = saver, nthreads = 1)
 
 
 ## ----retrieving results-------------------------------------------------------

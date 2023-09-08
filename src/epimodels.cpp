@@ -171,6 +171,159 @@ SEXP ModelSIR_cpp(
   
 #undef WrapSIR
 
+#define WrapSIRD(a) \
+  cpp11::external_pointer<epiworld::epimodels::ModelSIRD<>> (a)
+
+[[cpp11::register]]
+SEXP ModelSIRD_cpp(
+    std::string name,
+    double prevalence,
+    double transmission_rate,
+    double recovery_rate,
+    double death_rate
+) {
+  
+  // Creating a pointer to a ModelSIRD model
+  WrapSIRD(ptr)(
+      new epiworld::epimodels::ModelSIRD<>(
+          name,
+          prevalence,
+          transmission_rate,
+          recovery_rate,
+          death_rate
+      )
+  );
+  
+  return ptr;
+}
+  
+#undef WrapSIRD
+  
+#define WrapSEIRD(a) \
+  cpp11::external_pointer<epiworld::epimodels::ModelSEIRD<>> (a)
+
+[[cpp11::register]]
+  SEXP ModelSEIRD_cpp(
+      std::string name,
+      double prevalence,
+      double transmission_rate,
+      double incubation_days,
+      double recovery_rate,
+      double death_rate
+    
+  ) {
+    
+    // Creating a pointer to a ModelSEIRD model
+    WrapSEIRD(ptr)(
+        new epiworld::epimodels::ModelSEIRD<>(
+            name,
+            prevalence,
+            transmission_rate,
+            incubation_days,
+            recovery_rate,
+            death_rate
+        )
+    );
+    
+    return ptr;
+  }
+  
+#undef WrapSEIRD
+  
+#define WrapSISD(a) \
+  cpp11::external_pointer<epiworld::epimodels::ModelSISD<>> (a)
+
+[[cpp11::register]]
+SEXP ModelSISD_cpp(
+    std::string name,
+    double prevalence,
+    double transmission_rate,
+    double recovery_rate,
+    double death_rate
+) {
+  
+  // Creating a pointer to a ModelSISD model
+  WrapSISD(ptr)(
+      new epiworld::epimodels::ModelSISD<>(
+          name,
+          prevalence,
+          transmission_rate,
+          recovery_rate,
+          death_rate
+      )
+  );
+  
+  return ptr;
+}
+  
+#undef WrapSISD
+
+#define WrapSIRDCONN(a) \
+  cpp11::external_pointer<epiworld::epimodels::ModelSIRDCONN<>> (a)
+
+[[cpp11::register]]
+SEXP ModelSIRDCONN_cpp(
+    std::string name,
+    unsigned int n,
+    double prevalence,
+    double contact_rate,
+    double transmission_rate, 
+    double recovery_rate, 
+    double death_rate
+) {
+  
+  // Creating a pointer to a ModelSIR model
+  WrapSIRDCONN(ptr)(
+      new epiworld::epimodels::ModelSIRDCONN<>(
+          name,
+          n,
+          prevalence,
+          contact_rate,
+          transmission_rate,
+          recovery_rate,
+          death_rate
+      )
+  );
+  
+  return ptr;
+}
+  
+#undef WrapSIRDCONN
+  
+#define WrapSEIRDCONN(a) \
+  cpp11::external_pointer<epiworld::epimodels::ModelSEIRDCONN<>> (a)
+
+[[cpp11::register]]
+SEXP ModelSEIRDCONN_cpp(
+    std::string name,
+    unsigned int n,
+    double prevalence,
+    double contact_rate,
+    double transmission_rate,
+    double incubation_days,
+    double recovery_rate,
+    double death_rate
+) {
+  
+  // Creating a pointer to a ModelSIR model
+  WrapSEIRDCONN(ptr)(
+      new epiworld::epimodels::ModelSEIRDCONN<>(
+          name,
+          n,
+          prevalence,
+          contact_rate,
+          transmission_rate,
+          incubation_days,
+          recovery_rate,
+          death_rate
+      )
+  );
+  
+  return ptr;
+}
+  
+  
+#undef WrapSEIRDCONN
   
 #define WrapSEIRCONN(a) \
   cpp11::external_pointer<epiworld::epimodels::ModelSEIRCONN<>> (a)

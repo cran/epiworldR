@@ -237,10 +237,15 @@ gent <- plot_generation_time(seirconn)
 Other Models: 
 \code{\link{ModelDiffNet}()},
 \code{\link{ModelSEIRCONN}()},
+\code{\link{ModelSEIRDCONN}()},
+\code{\link{ModelSEIRD}()},
 \code{\link{ModelSEIR}()},
 \code{\link{ModelSIRCONN}()},
+\code{\link{ModelSIRDCONN}()},
+\code{\link{ModelSIRD}()},
 \code{\link{ModelSIRLogit}()},
 \code{\link{ModelSIR}()},
+\code{\link{ModelSISD}()},
 \code{\link{ModelSIS}()},
 \code{\link{ModelSURV}()}
 }

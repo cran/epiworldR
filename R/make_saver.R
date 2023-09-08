@@ -41,7 +41,7 @@
 #' saver <- make_saver("total_hist", "reproductive")
 #' 
 #' # Running and printing
-#' run_multiple(model_sir, ndays = 100, nsims = 50, saver = saver, nthread = 2)
+#' run_multiple(model_sir, ndays = 100, nsims = 50, saver = saver, nthreads = 2)
 #' 
 #' # Retrieving the results
 #' ans <- run_multiple_get_results(model_sir)
@@ -79,6 +79,17 @@ run_multiple.epiworld_model <- function(
   
   if (!inherits(saver, "epiworld_saver"))
     stop("-saver- should be of class \"epiworld_saver\"")
+
+  # If the saver is greater than 1, then
+  # we need to delete the files from the previous run
+  fnames <- list.files(
+    path = dirname(saver$fn),
+    full.names = TRUE
+    )
+
+  if (length(fnames)) {
+    unlink(fnames, expand = FALSE)
+  }
   
   run_multiple_cpp(
     m,
@@ -114,8 +125,6 @@ run_multiple_get_results <- function(m) {
   if (!length(saver)) 
     stop("No -saver- found. -run_multiple_get_results- can only be used after using -run_multiple-.")
   
-  pattern <- gsub("%[0-9]*lu", "*", saver$fn)
-  
   output <- vector("list", length(saver$what))
   names(output) <- saver$what
   
@@ -123,8 +132,8 @@ run_multiple_get_results <- function(m) {
     
     # Listing the files
     fnames <- list.files(
-      path    = dirname(pattern),
-      pattern = sprintf("%s\\.csv", i),
+      path       = dirname(saver$fn),
+      pattern    = sprintf("%s\\.csv", i),
       full.names = TRUE
     )
     
@@ -142,16 +151,27 @@ run_multiple_get_results <- function(m) {
     # Putting all together
     output[[i]] <- do.call(rbind, output[[i]])
     
-    # runif
-    # 
-    # runif(10, min=2, max=4)
-    # do.call(runif, list(10, 2, 4))
-    # 
-    # rbind(output[[i]][[1]], output[[i]][[2]], ...)
-    
-    class(output[[i]]) <- c("epiworld_multiple_save_i", class(output[[i]]))
+    # If there are no observations, then
+    err_msg <- tryCatch({
+      class(output[[i]]) <- c("epiworld_multiple_save_i", class(output[[i]]))
+    }, error = function(e) e
+    )
+
+    if (inherits(err_msg, "error")) {
+
+      warning(
+        "When retrieving the saved results, for the case of ",
+        i, ", there were no observations."
+        )
+
+      class(output[[i]]) <- structure(
+        data.frame(),
+        c("epiworld_multiple_save_i")
+      )
+
+    }
+
     attr(output[[i]], "what") <- i
-      
     
   }
   
@@ -171,6 +191,14 @@ plot.epiworld_multiple_save <- function(x, y = NULL, ...) {
 plot.epiworld_multiple_save_i <- function(x, y = NULL, ...) {
 
   what <- attr(x, "what")
+
+  if (nrow(x) == 0) {
+    warning(
+      "When plotting the saved results, for the case of ",
+      what, ", there were no observations."
+      )
+    return(NULL)
+  }
   
   # If it is not reproductive number, then...
   if (what != "reproductive") {
@@ -274,9 +302,17 @@ make_saver <- function(
   
   # Checking the filename
   file_output <- TRUE
+  
+  # Using tempfile to generate directories
+  id <- basename(tempfile("epiworldR-"))
+
   if (fn == "") {
-    fn <- file.path(tempdir(), "%05lu-episimulation.csv")
+
+    fp <- file.path(tempdir(), id)
+    dir.create(fp)
+    fn <- file.path(fp, "%05lu-episim")
     file_output <- FALSE
+
   } else if (!dir.exists(dirname(fn))) {
     stop("The directory \"", dirname(fn), "\" does not exists.")
   }
@@ -289,7 +325,8 @@ make_saver <- function(
       ptr         = do.call(make_saver_cpp, what_bool),
       fn          = fn,
       file_output = file_output,
-      what        = available[which(available %in% what)]
+      what        = available[which(available %in% what)],
+      id          = id
       ),
     class = "epiworld_saver"
   )
@@ -306,5 +343,6 @@ print.epiworld_saver <- function(x, ...) {
     cat("Saver pattern      :", x$fn)
   
   invisible(x)
+
 }
 
