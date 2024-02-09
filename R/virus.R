@@ -362,7 +362,7 @@ virus_fun_logit <- function(vars, coefs, model) {
   
   structure(
     virus_fun_logit_cpp(vars, coefs, model),
-    class = "epiworld_virus_fun",
+    class   = "epiworld_virus_fun",
     builder = "virus_fun_logit",
     vars    = vars,
     coefs   = coefs,
@@ -402,7 +402,7 @@ print.epiworld_virus_fun <- function(x, ...) {
 set_prob_infecting <- function(virus, prob) {
   
   stopifnot_virus(virus)
-  invisible(set_prob_infecting_cpp(virus, prob))
+  invisible(set_prob_infecting_cpp(virus, as.numeric(prob)))
   
 }
 
@@ -444,7 +444,7 @@ set_prob_infecting_fun <- function(virus, model, vfun) {
 set_prob_recovery <- function(virus, prob) {
   
   stopifnot_virus(virus)
-  invisible(set_prob_recovery_cpp(virus, prob))
+  invisible(set_prob_recovery_cpp(virus, as.numeric(prob)))
   
 }
 
@@ -478,7 +478,7 @@ set_prob_recovery_fun <- function(virus, model, vfun) {
 set_prob_death <- function(virus, prob) {
   
   stopifnot_virus(virus)
-  invisible(set_prob_death_cpp(virus, prob))
+  invisible(set_prob_death_cpp(virus, as.numeric(prob)))
   
 }
 
@@ -511,7 +511,7 @@ set_prob_death_fun <- function(virus, model, vfun) {
 set_incubation <- function(virus, incubation) {
   
   stopifnot_virus(virus)
-  invisible(set_incubation_cpp(virus, incubation))
+  invisible(set_incubation_cpp(virus, as.numeric(incubation)))
   
 }
 
@@ -536,48 +536,5 @@ set_incubation_fun <- function(virus, model, vfun) {
   
 }
 
-#' @export
-#' @rdname agents_smallworld
-#' @returns 
-#' - `get_agents_viruses` returns a list of class `epiworld_agents_viruses`
-#' with `epiworld_viruses` (list of lists).
-get_agents_viruses <- function(model) {
-
-  stopifnot_model(model)
-
-  res <- lapply(
-      get_agents_viruses_cpp(model),
-      `class<-`,
-      "epiworld_viruses"
-    )
-
-  structure(res, class = c("epiworld_agents_viruses", class(res)))
-  
-}
-
-#' @export 
-#' @rdname virus
-#' @param max_print Numeric scalar. Maximum number of viruses to print.
-#' @param ... Currently ignored.
-#' @param x An object of class `epiworld_agents_viruses`.
-print.epiworld_agents_viruses <- function(x, max_print = 10, ...) {
-
-  for (i in 1:min(max_print, length(x))) {
-    print_agent_viruses_cpp(x[[i]])
-  }
-
-  if (length(x) > max_print) {
-    cat(sprintf("Showing first %s of %s viruses.\n", max_print, length(x)))
-  }
-
-  invisible(x)
-  
-}
-
-#' @export
-print.epiworld_viruses <- function(x, ...) {
-  print_agent_viruses_cpp(x)
-  invisible(x)
-}
 
 

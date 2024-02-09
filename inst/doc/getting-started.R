@@ -63,7 +63,7 @@ add_virus(model_sir, flu, .0001)
 run(model_sir, ndays = 50, seed = 1912)
 model_sir
 
-## ---- fig.height=10-----------------------------------------------------------
+## ----fig.height=10------------------------------------------------------------
 repnum2 <- get_reproductive_number(model_sir)
 
 op <- par(mfrow = c(2,1))

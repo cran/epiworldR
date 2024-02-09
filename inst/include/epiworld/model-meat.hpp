@@ -1,8 +1,6 @@
 #ifndef EPIWORLD_MODEL_MEAT_HPP
 #define EPIWORLD_MODEL_MEAT_HPP
 
-
-
 /**
  * @brief Function factory for saving model runs
  * 
@@ -150,39 +148,32 @@ inline std::function<void(size_t,Model<TSeq>*)> make_save_run(
     return saver;
 }
 
+
 template<typename TSeq>
-inline void Model<TSeq>::actions_add(
+inline void Model<TSeq>::events_add(
     Agent<TSeq> * agent_,
     VirusPtr<TSeq> virus_,
     ToolPtr<TSeq> tool_,
     Entity<TSeq> * entity_,
-    epiworld_fast_uint new_state_,
+    epiworld_fast_int new_state_,
     epiworld_fast_int queue_,
     ActionFun<TSeq> call_,
     int idx_agent_,
     int idx_object_
 ) {
-    
+
     ++nactions;
 
     #ifdef EPI_DEBUG
     if (nactions == 0)
         throw std::logic_error("Actions cannot be zero!!");
-
-    if ((virus_ != nullptr) && idx_agent_ >= 0)
-    {
-        if (idx_agent_ >= static_cast<int>(virus_->get_agent()->get_n_viruses()))
-            throw std::logic_error(
-                "The virus to add is out of range in the host agent."
-                );
-    }
     #endif
 
-    if (nactions > actions.size())
+    if (nactions > events.size())
     {
 
-        actions.push_back(
-            Action<TSeq>(
+        events.emplace_back(
+            Event<TSeq>(
                 agent_, virus_, tool_, entity_, new_state_, queue_, call_,
                 idx_agent_, idx_object_
             ));
@@ -191,13 +182,13 @@ inline void Model<TSeq>::actions_add(
     else 
     {
 
-        Action<TSeq> & A = actions.at(nactions - 1u);
+        Event<TSeq> & A = events.at(nactions - 1u);
 
         A.agent      = agent_;
         A.virus      = virus_;
         A.tool       = tool_;
         A.entity     = entity_;
-        A.new_state = new_state_;
+        A.new_state  = new_state_;
         A.queue      = queue_;
         A.call       = call_;
         A.idx_agent  = idx_agent_;
@@ -210,78 +201,48 @@ inline void Model<TSeq>::actions_add(
 }
 
 template<typename TSeq>
-inline void Model<TSeq>::actions_run()
+inline void Model<TSeq>::events_run()
 {
     // Making the call
-    while (nactions != 0u)
+    size_t nevents_tmp = 0;
+    while (nevents_tmp < nactions)
     {
 
-        Action<TSeq>   a = actions[--nactions];
+        Event<TSeq> & a = events[nevents_tmp++];
         Agent<TSeq> * p  = a.agent;
 
-        // Applying function
+        #ifdef EPI_DEBUG
+        if (a.new_state >= static_cast<epiworld_fast_int>(nstates))
+            throw std::range_error(
+                "The proposed state " + std::to_string(a.new_state) + " is out of range. " +
+                "The model currently has " + std::to_string(nstates - 1) + " states.");
+
+        if (a.new_state < 0)
+            throw std::range_error(
+                "The proposed state " + std::to_string(a.new_state) + " is out of range. " +
+                "The state cannot be negative.");
+        #endif
+
+        // Undoing the change in the transition matrix
+        if ((p->state_last_changed == today()) && (static_cast<int>(p->state) != a.new_state))
+        {
+            // Undoing state change in the transition matrix
+            // The previous state is already recorded
+            db.update_state(p->state_prev, p->state, true);
+
+        } else 
+            p->state_prev = p->state; // Recording the previous state
+
+        // Applying function after the fact. This way, if there were
+        // updates, they can be recorded properly, before losing the information
+        p->state = a.new_state;
         if (a.call)
         {
             a.call(a, this);
         }
 
-        // Updating state
-        if (static_cast<epiworld_fast_int>(p->state) != a.new_state)
-        {
-
-            if (a.new_state >= static_cast<epiworld_fast_int>(nstates))
-                throw std::range_error(
-                    "The proposed state " + std::to_string(a.new_state) + " is out of range. " +
-                    "The model currently has " + std::to_string(nstates - 1) + " states.");
-
-            // Figuring out if we need to undo a change
-            // If the agent has made a change in the state recently, then we
-            // need to undo the accounting, e.g., if A->B was made, we need to
-            // undo it and set B->A so that the daily accounting is right.
-            if (p->state_last_changed == today())
-            {
-
-                // Updating accounting
-                db.update_state(p->state_prev, p->state, true); // Undoing
-                db.update_state(p->state_prev, a.new_state);
-
-                for (size_t v = 0u; v < p->n_viruses; ++v)
-                {
-                    db.update_virus(p->viruses[v]->id, p->state, p->state_prev); // Undoing
-                    db.update_virus(p->viruses[v]->id, p->state_prev, a.new_state);
-                }
-
-                for (size_t t = 0u; t < p->n_tools; ++t)
-                {
-                    db.update_tool(p->tools[t]->id, p->state, p->state_prev); // Undoing
-                    db.update_tool(p->tools[t]->id, p->state_prev, a.new_state);
-                }
-
-                // Changing to the new state, we won't update the
-                // previous state in case we need to undo the change
-                p->state = a.new_state;
-
-            } else {
-
-                // Updating accounting
-                db.update_state(p->state, a.new_state);
-
-                for (size_t v = 0u; v < p->n_viruses; ++v)
-                    db.update_virus(p->viruses[v]->id, p->state, a.new_state);
-
-                for (size_t t = 0u; t < p->n_tools; ++t)
-                    db.update_tool(p->tools[t]->id, p->state, a.new_state);
-
-                // Saving the last state and setting the new one
-                p->state_prev = p->state;
-                p->state      = a.new_state;
-
-                // It used to be a day before, but we still
-                p->state_last_changed = today();
-
-            }
-            
-        }
+        // Registering that the last change was today
+        p->state_last_changed = today();
 
         #ifdef EPI_DEBUG
         if (static_cast<int>(p->state) >= static_cast<int>(nstates))
@@ -310,6 +271,9 @@ inline void Model<TSeq>::actions_run()
         }
 
     }
+
+    // Go back to square 1
+    nactions = 0u;
 
     return;
     
@@ -435,10 +399,11 @@ inline Model<TSeq>::Model(const Model<TSeq> & model) :
     pb(model.pb),
     state_fun(model.state_fun),
     states_labels(model.states_labels),
+    initial_states_fun(model.initial_states_fun),
     nstates(model.nstates),
     verbose(model.verbose),
     current_date(model.current_date),
-    global_actions(model.global_actions),
+    globalevents(model.globalevents),
     queue(model.queue),
     use_queuing(model.use_queuing),
     array_double_tmp(model.array_double_tmp.size()),
@@ -474,6 +439,10 @@ inline Model<TSeq>::Model(const Model<TSeq> & model) :
     agents_data_ncols = model.agents_data_ncols;
 
 }
+
+template<typename TSeq>
+inline Model<TSeq>::Model(Model<TSeq> & model) :
+    Model(dynamic_cast< const Model<TSeq> & >(model)) {}
 
 template<typename TSeq>
 inline Model<TSeq>::Model(Model<TSeq> && model) :
@@ -515,10 +484,11 @@ inline Model<TSeq>::Model(Model<TSeq> && model) :
     pb(std::move(model.pb)),
     state_fun(std::move(model.state_fun)),
     states_labels(std::move(model.states_labels)),
+    initial_states_fun(std::move(model.initial_states_fun)),
     nstates(model.nstates),
     verbose(model.verbose),
     current_date(std::move(model.current_date)),
-    global_actions(std::move(model.global_actions)),
+    globalevents(std::move(model.globalevents)),
     queue(std::move(model.queue)),
     use_queuing(model.use_queuing),
     array_double_tmp(model.array_double_tmp.size()),
@@ -586,13 +556,14 @@ inline Model<TSeq> & Model<TSeq>::operator=(const Model<TSeq> & m)
 
     state_fun    = m.state_fun;
     states_labels = m.states_labels;
+    initial_states_fun = m.initial_states_fun;
     nstates       = m.nstates;
 
     verbose     = m.verbose;
 
     current_date = m.current_date;
 
-    global_actions = m.global_actions;
+    globalevents = m.globalevents;
 
     queue       = m.queue;
     use_queuing = m.use_queuing;
@@ -648,7 +619,7 @@ inline std::vector< Viruses_const<TSeq> > Model<TSeq>::get_agents_viruses() cons
 
     std::vector< Viruses_const<TSeq> > viruses(population.size());
     for (size_t i = 0u; i < population.size(); ++i)
-        viruses[i] = population[i].get_viruses();
+        viruses[i] = population[i].get_virus();
 
     return viruses;
 
@@ -661,7 +632,7 @@ inline std::vector< Viruses<TSeq> > Model<TSeq>::get_agents_viruses()
 
     std::vector< Viruses<TSeq> > viruses(population.size());
     for (size_t i = 0u; i < population.size(); ++i)
-        viruses[i] = population[i].get_viruses();
+        viruses[i] = population[i].get_virus();
 
     return viruses;
 
@@ -674,7 +645,7 @@ inline std::vector<Entity<TSeq>> & Model<TSeq>::get_entities()
 }
 
 template<typename TSeq>
-inline void Model<TSeq>::agents_smallworld(
+inline Model<TSeq> & Model<TSeq>::agents_smallworld(
     epiworld_fast_uint n,
     epiworld_fast_uint k,
     bool d,
@@ -684,6 +655,8 @@ inline void Model<TSeq>::agents_smallworld(
     agents_from_adjlist(
         rgraph_smallworld(n, k, p, d, *this)
     );
+
+    return *this;
 }
 
 template<typename TSeq>
@@ -770,10 +743,9 @@ inline void Model<TSeq>::dist_virus()
 
     // Starting first infection
     int n = size();
-    std::vector< size_t > idx(n);
-
-    int n_left = n;
+    std::vector< size_t > idx(n, 0u);
     std::iota(idx.begin(), idx.end(), 0);
+    int n_left = idx.size();
 
     for (size_t v = 0u; v < viruses.size(); ++v)
     {
@@ -811,7 +783,7 @@ inline void Model<TSeq>::dist_virus()
                 Agent<TSeq> & agent = population[idx[loc]];
                 
                 // Adding action
-                agent.add_virus(
+                agent.set_virus(
                     virus,
                     const_cast<Model<TSeq> * >(this),
                     virus->state_init,
@@ -826,8 +798,8 @@ inline void Model<TSeq>::dist_virus()
 
         }
 
-        // Apply the actions
-        actions_run();
+        // Apply the events
+        events_run();
     }
 
 }
@@ -886,8 +858,8 @@ inline void Model<TSeq>::dist_tools()
 
         }
 
-        // Apply the actions
-        actions_run();
+        // Apply the events
+        events_run();
 
     }
 
@@ -943,8 +915,8 @@ inline void Model<TSeq>::dist_tools()
 
 //         }
 
-//         // Apply the actions
-//         actions_run();
+//         // Apply the events
+//         events_run();
 
 //     }
 
@@ -1488,7 +1460,7 @@ inline void Model<TSeq>::next() {
 }
 
 template<typename TSeq>
-inline void Model<TSeq>::run(
+inline Model<TSeq> & Model<TSeq>::run(
     epiworld_fast_uint ndays,
     int seed
 ) 
@@ -1574,8 +1546,8 @@ inline void Model<TSeq>::run(
         // user needs.
         this->update_state();
     
-        // We start with the global actions
-        this->run_global_actions();
+        // We start with the Global events
+        this->run_globalevents();
 
         // In this case we are applying degree sequence rewiring
         // to change the network just a bit.
@@ -1593,6 +1565,8 @@ inline void Model<TSeq>::run(
     this->current_date--;
 
     chrono_end();
+
+    return *this;
 
 }
 
@@ -1815,7 +1789,7 @@ inline void Model<TSeq>::update_state() {
 
     }
 
-    actions_run();
+    events_run();
     
 }
 
@@ -1823,6 +1797,15 @@ inline void Model<TSeq>::update_state() {
 
 template<typename TSeq>
 inline void Model<TSeq>::mutate_virus() {
+
+    // Checking if any virus has mutation
+    size_t nmutates = 0u;
+    for (const auto & v: viruses)
+        if (v->mutation_fun)
+            nmutates++;
+
+    if (nmutates == 0u)
+        return;
 
     if (use_queuing)
     {
@@ -1834,9 +1817,8 @@ inline void Model<TSeq>::mutate_virus() {
             if (queue[++i] == 0)
                 continue;
 
-            if (p.n_viruses > 0u)
-                for (auto & v : p.get_viruses())
-                    v->mutate(this);
+            if (p.virus != nullptr)
+                p.virus->mutate(this);
 
         }
 
@@ -1847,9 +1829,8 @@ inline void Model<TSeq>::mutate_virus() {
         for (auto & p: population)
         {
 
-            if (p.n_viruses > 0u)
-                for (auto & v : p.get_viruses())
-                    v->mutate(this);
+            if (p.virus != nullptr)
+                p.virus->mutate(this);
 
         }
 
@@ -1890,13 +1871,15 @@ inline bool Model<TSeq>::get_verbose() const {
 }
 
 template<typename TSeq>
-inline void Model<TSeq>::verbose_on() {
+inline Model<TSeq> & Model<TSeq>::verbose_on() {
     verbose = true;
+    return *this;
 }
 
 template<typename TSeq>
-inline void Model<TSeq>::verbose_off() {
+inline Model<TSeq> & Model<TSeq>::verbose_off() {
     verbose = false;
+    return *this;
 }
 
 template<typename TSeq>
@@ -2104,6 +2087,9 @@ inline void Model<TSeq>::reset() {
     // Re distributing tools and virus
     dist_virus();
     dist_tools();
+
+    // Distributing initial state, if specified
+    initial_states_fun(this);
 
     // Recording the original state (at time 0) and advancing
     // to time 1
@@ -2426,15 +2412,15 @@ inline UserData<TSeq> & Model<TSeq>::get_user_data()
 }
 
 template<typename TSeq>
-inline void Model<TSeq>::add_global_action(
+inline void Model<TSeq>::add_globalevent(
     std::function<void(Model<TSeq>*)> fun,
     std::string name,
     int date
 )
 {
 
-    global_actions.push_back(
-        GlobalAction<TSeq>(
+    globalevents.push_back(
+        GlobalEvent<TSeq>(
             fun,
             name,
             date
@@ -2444,20 +2430,20 @@ inline void Model<TSeq>::add_global_action(
 }
 
 template<typename TSeq>
-inline void Model<TSeq>::add_global_action(
-    GlobalAction<TSeq> action
+inline void Model<TSeq>::add_globalevent(
+    GlobalEvent<TSeq> action
 )
 {
-    global_actions.push_back(action);
+    globalevents.push_back(action);
 }
 
 template<typename TSeq>
-GlobalAction<TSeq> & Model<TSeq>::get_global_action(
+GlobalEvent<TSeq> & Model<TSeq>::get_globalevent(
     std::string name
 )
 {
 
-    for (auto & a : global_actions)
+    for (auto & a : globalevents)
         if (a.name == name)
             return a;
 
@@ -2466,30 +2452,30 @@ GlobalAction<TSeq> & Model<TSeq>::get_global_action(
 }
 
 template<typename TSeq>
-GlobalAction<TSeq> & Model<TSeq>::get_global_action(
+GlobalEvent<TSeq> & Model<TSeq>::get_globalevent(
     size_t index
 )
 {
 
-    if (index >= global_actions.size())
+    if (index >= globalevents.size())
         throw std::range_error("The index " + std::to_string(index) + " is out of range.");
 
-    return global_actions[index];
+    return globalevents[index];
 
 }
 
 // Remove implementation
 template<typename TSeq>
-inline void Model<TSeq>::rm_global_action(
+inline void Model<TSeq>::rm_globalevent(
     std::string name
 )
 {
 
-    for (auto it = global_actions.begin(); it != global_actions.end(); ++it)
+    for (auto it = globalevents.begin(); it != globalevents.end(); ++it)
     {
         if (it->get_name() == name)
         {
-            global_actions.erase(it);
+            globalevents.erase(it);
             return;
         }
     }
@@ -2500,26 +2486,26 @@ inline void Model<TSeq>::rm_global_action(
 
 // Same as above, but the index implementation
 template<typename TSeq>
-inline void Model<TSeq>::rm_global_action(
+inline void Model<TSeq>::rm_globalevent(
     size_t index
 )
 {
 
-    if (index >= global_actions.size())
+    if (index >= globalevents.size())
         throw std::range_error("The index " + std::to_string(index) + " is out of range.");
 
-    global_actions.erase(global_actions.begin() + index);
+    globalevents.erase(globalevents.begin() + index);
 
 }
 
 template<typename TSeq>
-inline void Model<TSeq>::run_global_actions()
+inline void Model<TSeq>::run_globalevents()
 {
 
-    for (auto & action: global_actions)
+    for (auto & action: globalevents)
     {
         action(this, today());
-        actions_run();
+        events_run();
     }
 
 }
@@ -2531,9 +2517,10 @@ inline void Model<TSeq>::queuing_on()
 }
 
 template<typename TSeq>
-inline void Model<TSeq>::queuing_off()
+inline Model<TSeq> & Model<TSeq>::queuing_off()
 {
     use_queuing = false;
+    return *this;
 }
 
 template<typename TSeq>
@@ -2552,6 +2539,18 @@ template<typename TSeq>
 inline const std::vector< VirusPtr<TSeq> > & Model<TSeq>::get_viruses() const
 {
     return viruses;
+}
+
+template<typename TSeq>
+inline const std::vector< epiworld_double > & Model<TSeq>::get_prevalence_virus() const
+{
+    return prevalence_virus;
+}
+
+template<typename TSeq>
+inline const std::vector< bool > & Model<TSeq>::get_prevalence_virus_as_proportion() const
+{
+    return prevalence_virus_as_proportion;
 }
 
 template<typename TSeq>
@@ -2789,7 +2788,7 @@ inline bool Model<TSeq>::operator==(const Model<TSeq> & other) const
         "Model:: current_date don't match"
     )
 
-    VECT_MATCH(global_actions, other.global_actions, "global action don't match");
+    VECT_MATCH(globalevents, other.globalevents, "global action don't match");
 
     EPI_DEBUG_FAIL_AT_TRUE(
         queue != other.queue,

@@ -351,3 +351,32 @@ get_tool <- function(model, tool_pos) {
     class = "epiworld_tool"
   )
 }
+
+#' @export 
+#' @param proportions Numeric vector. Proportions in which agents will be
+#' distributed (see details).
+#' @return 
+#' - `inital_states` returns the model with an updated initial state.
+#' @rdname epiworld-methods
+initial_states <- function(model, proportions) {
+
+  stopifnot_model(model)
+  invisible(initial_states_cpp(model, proportions))
+
+}
+
+#' @rdname epiworld-methods
+#' @export
+#' @details `epiworld_model` objects are pointers to an underlying C++ class
+#' in `epiworld`. To generate a copy of a model, use `clone_model`, otherwise,
+#' the assignment operator will only copy the pointer.
+#' @return
+#' - `clone_model` returns a copy of the model.
+clone_model <- function(model) {
+  stopifnot_model(model)
+  structure(
+    clone_model_cpp(model),
+    class = class(model)
+  )
+}
+

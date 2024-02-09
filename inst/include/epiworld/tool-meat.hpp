@@ -66,7 +66,9 @@ inline ToolFun<TSeq> tool_fun_logit(
         size_t K = coefs_f.size();
         epiworld_double res = 0.0;
 
+        #if defined(__OPENMP) || defined(_OPENMP)
         #pragma omp simd reduction(+:res)
+        #endif
         for (size_t i = 0u; i < K; ++i)
             res += agent->operator[](vars.at(i)) * coefs_f.at(i);
 
@@ -486,12 +488,12 @@ template<typename TSeq>
 inline void Tool<TSeq>::print() const
 {
 
-    printf_epiworld("Tool           : %s\n", tool_name->c_str());
-    printf_epiworld("Id             : %s\n", (id < 0)? std::string("(empty)").c_str() : std::to_string(id).c_str());
-    printf_epiworld("state_init    : %i\n", state_init);
-    printf_epiworld("state_post    : %i\n", state_post);
-    printf_epiworld("queue_init     : %i\n", queue_init);
-    printf_epiworld("queue_post     : %i\n", queue_post);
+    printf_epiworld("Tool       : %s\n", tool_name->c_str());
+    printf_epiworld("Id         : %s\n", (id < 0)? std::string("(empty)").c_str() : std::to_string(id).c_str());
+    printf_epiworld("state_init : %i\n", static_cast<int>(state_init));
+    printf_epiworld("state_post : %i\n", static_cast<int>(state_post));
+    printf_epiworld("queue_init : %i\n", static_cast<int>(queue_init));
+    printf_epiworld("queue_post : %i\n", static_cast<int>(queue_post));
 
 }
 

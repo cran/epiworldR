@@ -9,7 +9,7 @@
     #define EPIWORLD_MAXNEIGHBORS 1048576
 #endif
 
-#ifdef _OPENMP
+#if defined(_OPENMP) || defined(__OPENMP)
     #include <omp.h>
 // #else
 //     #define omp_get_thread_num() 0
@@ -88,10 +88,10 @@ template<typename TSeq = EPI_DEFAULT_TSEQ>
 using GlobalFun = std::function<void(Model<TSeq>*)>;
 
 template<typename TSeq>
-struct Action;
+struct Event;
 
 template<typename TSeq>
-using ActionFun = std::function<void(Action<TSeq>&,Model<TSeq>*)>;
+using ActionFun = std::function<void(Event<TSeq>&,Model<TSeq>*)>;
 
 /**
  * @brief Decides how to distribute viruses at initialization
@@ -112,12 +112,12 @@ template<typename TSeq>
 using EntityToAgentFun = std::function<void(Entity<TSeq>&,Model<TSeq>*)>;
 
 /**
- * @brief Action data for update an agent
+ * @brief Event data for update an agent
  * 
  * @tparam TSeq 
  */
 template<typename TSeq>
-struct Action {
+struct Event {
     Agent<TSeq> * agent;
     VirusPtr<TSeq> virus;
     ToolPtr<TSeq> tool;
@@ -129,7 +129,7 @@ struct Action {
     int idx_object;
 public:
 /**
-     * @brief Construct a new Action object
+     * @brief Construct a new Event object
      * 
      * All the parameters are rather optional.
      * 
@@ -144,7 +144,7 @@ public:
      * @param idx_agent_ Location of agent in object.
      * @param idx_object_ Location of object in agent.
      */
-    Action(
+    Event(
         Agent<TSeq> * agent_,
         VirusPtr<TSeq> virus_,
         ToolPtr<TSeq> tool_,
@@ -259,7 +259,9 @@ public:
         if (a) \
         {\
             throw EPI_DEBUG_ERROR(std::logic_error, b); \
-        } 
+        }
+
+    #define epiexception(a) std::logic_error
 #else
     #define EPI_DEBUG_PRINTF(fmt, ...)
     #define EPI_DEBUG_ERROR(fmt, ...)
@@ -271,9 +273,10 @@ public:
     #define EPI_DEBUG_FAIL_AT_TRUE(a, b) \
         if (a) \
             return false;
+    #define epiexception(a) a
 #endif
 
-#ifdef EPI_DEBUG_NO_THREAD_ID
+#if defined(EPI_DEBUG_NO_THREAD_ID) || (!defined(__OPENMP) && !defined(_OPENMP))
     #define EPI_GET_THREAD_ID() 0
 #else
     #define EPI_GET_THREAD_ID() omp_get_thread_num()

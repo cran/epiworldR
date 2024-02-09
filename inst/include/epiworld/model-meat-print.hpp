@@ -2,7 +2,7 @@
 #define EPIWORLD_MODEL_MEAT_PRINT_HPP
 
 template<typename TSeq>
-inline void Model<TSeq>::print(bool lite) const
+inline const Model<TSeq> & Model<TSeq>::print(bool lite) const
 {
 
     // Horizontal line
@@ -58,7 +58,7 @@ inline void Model<TSeq>::print(bool lite) const
             printf_epiworld(" The model hasn't been run yet.\n");
         }
 
-        return;
+        return *this;
     }
 
     printf_epiworld("%s\n%s\n\n",line.c_str(), "SIMULATION STUDY");
@@ -121,9 +121,9 @@ inline void Model<TSeq>::print(bool lite) const
         printf_epiworld("Rewiring            : off\n\n");
     }
     
-    // Printing global actions
-    printf_epiworld("Global actions:\n");
-    for (auto & a : global_actions)
+    // Printing Global events
+    printf_epiworld("Global events:\n");
+    for (auto & a : globalevents)
     {
         if (a.get_day() < 0)
         {
@@ -133,7 +133,7 @@ inline void Model<TSeq>::print(bool lite) const
         }
     }
 
-    if (global_actions.size() == 0u)
+    if (globalevents.size() == 0u)
     {
         printf_epiworld(" (none)\n");
     }
@@ -145,7 +145,10 @@ inline void Model<TSeq>::print(bool lite) const
 
         if ((n_viruses_model > 10) && (i >= 10))
         {
-            printf_epiworld(" ...and %li more viruses...\n", n_viruses_model - i);
+            printf_epiworld(" ...and %i more viruses...\n",
+                static_cast<int>(n_viruses_model) - 
+                static_cast<int>(i)
+                );
             break;
         }
 
@@ -184,6 +187,14 @@ inline void Model<TSeq>::print(bool lite) const
 
     }
 
+    auto nvariants = db.get_n_viruses() - n_viruses_model;
+    if (nvariants > 0)
+    {
+
+        printf_epiworld(" ...and %i more variants...\n", static_cast<int>(nvariants));
+
+    }
+
     if (viruses.size() == 0u)
     {
         printf_epiworld(" (none)\n");
@@ -196,7 +207,10 @@ inline void Model<TSeq>::print(bool lite) const
 
         if ((n_tools_model > 10) && (i >= 10))
         {
-            printf_epiworld(" ...and %li more tools...\n", n_tools_model - i);
+            printf_epiworld(
+                " ...and %i more tools...\n",
+                static_cast<int>(n_tools_model) - static_cast<int>(i)
+                );
             break;
         }
 
@@ -324,7 +338,7 @@ inline void Model<TSeq>::print(bool lite) const
     if (today() != 0)
         (void) db.transition_probability(true);
 
-    return;
+    return *this;
 
 }
 
