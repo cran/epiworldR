@@ -220,6 +220,138 @@ ModelSEIRMixing_cpp <- function(name, n, prevalence, contact_rate, transmission_
   .Call(`_epiworldR_ModelSEIRMixing_cpp`, name, n, prevalence, contact_rate, transmission_rate, incubation_days, recovery_rate, contact_matrix)
 }
 
+LFMCMC_cpp <- function(model) {
+  .Call(`_epiworldR_LFMCMC_cpp`, model)
+}
+
+run_lfmcmc_cpp <- function(lfmcmc, params_init_, n_samples_, epsilon_, seed) {
+  .Call(`_epiworldR_run_lfmcmc_cpp`, lfmcmc, params_init_, n_samples_, epsilon_, seed)
+}
+
+set_observed_data_cpp <- function(lfmcmc, observed_data_) {
+  .Call(`_epiworldR_set_observed_data_cpp`, lfmcmc, observed_data_)
+}
+
+set_proposal_fun_cpp <- function(lfmcmc, fun) {
+  .Call(`_epiworldR_set_proposal_fun_cpp`, lfmcmc, fun)
+}
+
+use_proposal_norm_reflective_cpp <- function(lfmcmc) {
+  .Call(`_epiworldR_use_proposal_norm_reflective_cpp`, lfmcmc)
+}
+
+set_simulation_fun_cpp <- function(lfmcmc, fun) {
+  .Call(`_epiworldR_set_simulation_fun_cpp`, lfmcmc, fun)
+}
+
+set_summary_fun_cpp <- function(lfmcmc, fun) {
+  .Call(`_epiworldR_set_summary_fun_cpp`, lfmcmc, fun)
+}
+
+set_kernel_fun_cpp <- function(lfmcmc, fun) {
+  .Call(`_epiworldR_set_kernel_fun_cpp`, lfmcmc, fun)
+}
+
+use_kernel_fun_gaussian_cpp <- function(lfmcmc) {
+  .Call(`_epiworldR_use_kernel_fun_gaussian_cpp`, lfmcmc)
+}
+
+get_mean_params_cpp <- function(lfmcmc) {
+  .Call(`_epiworldR_get_mean_params_cpp`, lfmcmc)
+}
+
+get_mean_stats_cpp <- function(lfmcmc) {
+  .Call(`_epiworldR_get_mean_stats_cpp`, lfmcmc)
+}
+
+get_initial_params_cpp <- function(lfmcmc) {
+  .Call(`_epiworldR_get_initial_params_cpp`, lfmcmc)
+}
+
+get_current_proposed_params_cpp <- function(lfmcmc) {
+  .Call(`_epiworldR_get_current_proposed_params_cpp`, lfmcmc)
+}
+
+get_current_accepted_params_cpp <- function(lfmcmc) {
+  .Call(`_epiworldR_get_current_accepted_params_cpp`, lfmcmc)
+}
+
+get_current_proposed_stats_cpp <- function(lfmcmc) {
+  .Call(`_epiworldR_get_current_proposed_stats_cpp`, lfmcmc)
+}
+
+get_current_accepted_stats_cpp <- function(lfmcmc) {
+  .Call(`_epiworldR_get_current_accepted_stats_cpp`, lfmcmc)
+}
+
+get_observed_stats_cpp <- function(lfmcmc) {
+  .Call(`_epiworldR_get_observed_stats_cpp`, lfmcmc)
+}
+
+get_all_sample_params_cpp <- function(lfmcmc) {
+  .Call(`_epiworldR_get_all_sample_params_cpp`, lfmcmc)
+}
+
+get_all_sample_stats_cpp <- function(lfmcmc) {
+  .Call(`_epiworldR_get_all_sample_stats_cpp`, lfmcmc)
+}
+
+get_all_sample_acceptance_cpp <- function(lfmcmc) {
+  .Call(`_epiworldR_get_all_sample_acceptance_cpp`, lfmcmc)
+}
+
+get_all_sample_drawn_prob_cpp <- function(lfmcmc) {
+  .Call(`_epiworldR_get_all_sample_drawn_prob_cpp`, lfmcmc)
+}
+
+get_all_sample_kernel_scores_cpp <- function(lfmcmc) {
+  .Call(`_epiworldR_get_all_sample_kernel_scores_cpp`, lfmcmc)
+}
+
+get_all_accepted_params_cpp <- function(lfmcmc) {
+  .Call(`_epiworldR_get_all_accepted_params_cpp`, lfmcmc)
+}
+
+get_all_accepted_stats_cpp <- function(lfmcmc) {
+  .Call(`_epiworldR_get_all_accepted_stats_cpp`, lfmcmc)
+}
+
+get_all_accepted_kernel_scores_cpp <- function(lfmcmc) {
+  .Call(`_epiworldR_get_all_accepted_kernel_scores_cpp`, lfmcmc)
+}
+
+get_n_samples_cpp <- function(lfmcmc) {
+  .Call(`_epiworldR_get_n_samples_cpp`, lfmcmc)
+}
+
+get_n_stats_cpp <- function(lfmcmc) {
+  .Call(`_epiworldR_get_n_stats_cpp`, lfmcmc)
+}
+
+get_n_params_cpp <- function(lfmcmc) {
+  .Call(`_epiworldR_get_n_params_cpp`, lfmcmc)
+}
+
+verbose_off_lfmcmc_cpp <- function(lfmcmc) {
+  .Call(`_epiworldR_verbose_off_lfmcmc_cpp`, lfmcmc)
+}
+
+verbose_on_lfmcmc_cpp <- function(lfmcmc) {
+  .Call(`_epiworldR_verbose_on_lfmcmc_cpp`, lfmcmc)
+}
+
+set_params_names_cpp <- function(lfmcmc, names) {
+  .Call(`_epiworldR_set_params_names_cpp`, lfmcmc, names)
+}
+
+set_stats_names_cpp <- function(lfmcmc, names) {
+  .Call(`_epiworldR_set_stats_names_cpp`, lfmcmc, names)
+}
+
+print_lfmcmc_cpp <- function(lfmcmc, burnin) {
+  .Call(`_epiworldR_print_lfmcmc_cpp`, lfmcmc, burnin)
+}
+
 print_cpp <- function(m, lite) {
   .Call(`_epiworldR_print_cpp`, m, lite)
 }
@@ -260,6 +392,10 @@ set_param_cpp <- function(model, pname, val) {
   .Call(`_epiworldR_set_param_cpp`, model, pname, val)
 }
 
+add_param_cpp <- function(model, pname, val) {
+  .Call(`_epiworldR_add_param_cpp`, model, pname, val)
+}
+
 set_name_cpp <- function(model, mname) {
   .Call(`_epiworldR_set_name_cpp`, model, mname)
 }
@@ -290,6 +426,10 @@ get_n_tools_cpp <- function(model) {
 
 get_ndays_cpp <- function(model) {
   .Call(`_epiworldR_get_ndays_cpp`, model)
+}
+
+today_cpp <- function(model) {
+  .Call(`_epiworldR_today_cpp`, model)
 }
 
 get_n_replicates_cpp <- function(model) {

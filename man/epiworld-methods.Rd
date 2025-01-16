@@ -11,12 +11,15 @@
 \alias{summary.epiworld_model}
 \alias{get_states}
 \alias{get_param}
+\alias{add_param}
+\alias{add_param.epiworld_model}
 \alias{set_param}
 \alias{set_name}
 \alias{get_name}
 \alias{get_n_viruses}
 \alias{get_n_tools}
 \alias{get_ndays}
+\alias{today}
 \alias{get_n_replicates}
 \alias{size}
 \alias{set_agents_data}
@@ -35,13 +38,17 @@ verbose_off(x)
 
 verbose_on(x)
 
-run(model, ndays, seed = sample.int(10000, 1))
+run(model, ndays, seed = NULL)
 
 \method{summary}{epiworld_model}(object, ...)
 
 get_states(x)
 
 get_param(x, pname)
+
+add_param(x, pname, pval)
+
+\method{add_param}{epiworld_model}(x, pname, pval)
 
 set_param(x, pname, pval)
 
@@ -54,6 +61,8 @@ get_n_viruses(x)
 get_n_tools(x)
 
 get_ndays(x)
+
+today(x)
 
 get_n_replicates(x)
 
@@ -78,7 +87,7 @@ clone_model(model)
 
 \item{ndays}{Number of days (steps) of the simulation.}
 
-\item{seed}{Seed to set for initializing random number generator.}
+\item{seed}{Seed to set for initializing random number generator (passed to \code{\link[=set.seed]{set.seed()}}).}
 
 \item{object}{Object of class \code{epiworld_model}.}
 
@@ -125,6 +134,10 @@ of class \code{epiworld_model}.
 }
 
 \itemize{
+\item \code{add_param} returns the model with the added parameter invisibly.
+}
+
+\itemize{
 \item The \code{set_param} function does not return a value but instead alters a
 parameter value.
 }
@@ -148,6 +161,10 @@ of \code{epiworld_model}.
 
 \itemize{
 \item \code{get_ndays} returns the number of days of the model.
+}
+
+\itemize{
+\item \code{today} returns the current model day
 }
 
 \itemize{
@@ -199,79 +216,83 @@ the assignment operator will only copy the pointer.
 \examples{
 
 model_sirconn <- ModelSIRCONN(
-name                = "COVID-19",
-n                   = 10000,
-prevalence          = 0.01,
-contact_rate        = 5,
-transmission_rate   = 0.4,
-recovery_rate       = 0.95
+  name                = "COVID-19",
+  n                   = 10000,
+  prevalence          = 0.01,
+  contact_rate        = 5,
+  transmission_rate   = 0.4,
+  recovery_rate       = 0.95
 )
 
-# Queuing - If you wish to implement the queuing function, declare whether 
-# you would like it "on" or "off", if any. 
+# Queuing - If you wish to implement the queuing function, declare whether
+# you would like it "on" or "off", if any.
 queuing_on(model_sirconn)
 queuing_off(model_sirconn)
 run(model_sirconn, ndays = 100, seed = 1912)
 
-# Verbose - "on" prints the progress bar on the screen while "off" 
-# deactivates the progress bar. Declare which function you want to implement, 
-# if any. 
+# Verbose - "on" prints the progress bar on the screen while "off"
+# deactivates the progress bar. Declare which function you want to implement,
+# if any.
 verbose_on(model_sirconn)
 verbose_off(model_sirconn)
 run(model_sirconn, ndays = 100, seed = 1912)
 
 get_states(model_sirconn) # Returns all unique states found within the model.
 
-get_param(model_sirconn, 'Contact rate') # Returns the value of the selected 
-                                         # parameter within the model object.
-                                         # In order to view the parameters, 
-                                         # run the model object and find the 
-                                         # "Model parameters" section. 
+get_param(model_sirconn, "Contact rate") # Returns the value of the selected
+# parameter within the model object.
+# In order to view the parameters,
+# run the model object and find the
+# "Model parameters" section.
 
-set_param(model_sirconn, 'Contact rate', 2) # Allows for adjustment of model 
-                                            # parameters within the model 
-                                            # object. In this example, the 
-                                            # Contact rate parameter is 
-                                            # changed to 2. You can now rerun 
-                                            # the model to observe any 
-                                            # differences.
-                                            
-set_name(model_sirconn, 'My Epi-Model') # This function allows for setting 
-                                        # a name for the model. Running the 
-                                        # model object, the name of the model
-                                        # is now reflected next to "Name of 
-                                        # the model". 
-                                        
-get_name(model_sirconn) # Returns the set name of the model. 
+set_param(model_sirconn, "Contact rate", 2) # Allows for adjustment of model
+# parameters within the model
+# object. In this example, the
+# Contact rate parameter is
+# changed to 2. You can now rerun
+# the model to observe any
+# differences.
 
-get_n_viruses(model_sirconn) # Returns the number of viruses in the model. 
-                              # In this case, there is only one virus:
-                              # "COVID-19". 
-                              
-get_n_tools(model_sirconn) # Returns the number of tools in the model. In 
-                           # this case, there are zero tools.  
-                           
+set_name(model_sirconn, "My Epi-Model") # This function allows for setting
+# a name for the model. Running the
+# model object, the name of the model
+# is now reflected next to "Name of
+# the model".
+
+get_name(model_sirconn) # Returns the set name of the model.
+
+get_n_viruses(model_sirconn) # Returns the number of viruses in the model.
+# In this case, there is only one virus:
+# "COVID-19".
+
+get_n_tools(model_sirconn) # Returns the number of tools in the model. In
+# this case, there are zero tools.
+
 get_ndays(model_sirconn) # Returns the length of the simulation in days. This
-                         # will match "ndays" within the "run" function. 
-                         
-get_n_replicates(model_sirconn) # Returns the number of replicates of the 
-                                # model. 
-                                
-size(model_sirconn) # Returns the population size in the model. In this case, 
-                    # there are 10,000 agents in the model. 
+# will match "ndays" within the "run" function.
+
+today(model_sirconn) # Returns the current day of the simulation. This will
+# match "get_ndays()" if run at the end of a simulation, but will differ if run
+# during a simulation
+
+get_n_replicates(model_sirconn) # Returns the number of replicates of the
+# model.
+
+size(model_sirconn) # Returns the population size in the model. In this case,
+# there are 10,000 agents in the model.
 # Set Agents Data
-# First, your data matrix must have the same number of rows as agents in the 
-# model. Below is a generated matrix which will be passed into the 
-# "set_agents_data" function. 
-data <- matrix(data=runif(20000, min=0, max=100), nrow=10000, ncol=2)                   
+# First, your data matrix must have the same number of rows as agents in the
+# model. Below is a generated matrix which will be passed into the
+# "set_agents_data" function.
+data <- matrix(data = runif(20000, min = 0, max = 100), nrow = 10000, ncol = 2)
 set_agents_data(model_sirconn, data)
-get_agents_data_ncols(model_sirconn) # Returns number of columns 
+get_agents_data_ncols(model_sirconn) # Returns number of columns
 
-get_virus(model_sirconn, 0) # Returns information about the first virus in 
-                            # the model (index begins at 0).
+get_virus(model_sirconn, 0) # Returns information about the first virus in
+# the model (index begins at 0).
 
-add_tool(model_sirconn, tool("Vaccine", .9, .9, .5, 1, prevalence = 0.5, as_prop = TRUE))                            
-get_tool(model_sirconn, 0) # Returns information about the first tool in the 
-                           # model. In this case, there are no tools so an 
-                           # error message will occur. 
+add_tool(model_sirconn, tool("Vaccine", .9, .9, .5, 1, prevalence = 0.5, as_prop = TRUE))
+get_tool(model_sirconn, 0) # Returns information about the first tool in the
+# model. In this case, there are no tools so an
+# error message will occur.
 }

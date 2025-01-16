@@ -17,7 +17,7 @@ stopifnot_model <- function(model) {
 #'
 #' @param x An object of class `epiworld_model`.
 #' @param ndays Number of days (steps) of the simulation.
-#' @param seed Seed to set for initializing random number generator.
+#' @param seed Seed to set for initializing random number generator (passed to [set.seed()]).
 #' @param model Model object.
 #' @export
 #' @name epiworld-methods
@@ -80,6 +80,10 @@ stopifnot_model <- function(model) {
 #' get_ndays(model_sirconn) # Returns the length of the simulation in days. This
 #' # will match "ndays" within the "run" function.
 #'
+#' today(model_sirconn) # Returns the current day of the simulation. This will
+#' # match "get_ndays()" if run at the end of a simulation, but will differ if run
+#' # during a simulation
+#'
 #' get_n_replicates(model_sirconn) # Returns the number of replicates of the
 #' # model.
 #'
@@ -124,6 +128,18 @@ queuing_on.epiworld_model <- function(x) {
 queuing_off <- function(x) UseMethod("queuing_off")
 
 #' @export
+queuing_off.epiworld_sirconn <- function(x) {
+  warning("SIR Connected models do not have queue.")
+  invisible(x)
+}
+
+#' @export
+queuing_off.epiworld_seirconn <- function(x) {
+  warning("SEIR Connected models do not have queue.")
+  invisible(x)
+}
+
+#' @export
 queuing_off.epiworld_model <- function(x) {
   invisible(queuing_off_cpp(x))
 }
@@ -157,11 +173,12 @@ verbose_on.epiworld_model <- function(x) {
 #' @returns
 #' - The `run` function returns the simulated model of class `epiworld_model`.
 #' @rdname epiworld-methods
-run <- function(model, ndays, seed = sample.int(1e4, 1)) UseMethod("run")
+run <- function(model, ndays, seed = NULL) UseMethod("run")
 
 #' @export
-run.epiworld_model <- function(model, ndays, seed = sample.int(1e4, 1)) {
-  run_cpp(model, ndays, seed)
+run.epiworld_model <- function(model, ndays, seed = NULL) {
+  if (length(seed)) set.seed(seed)
+  run_cpp(model, ndays, sample.int(1e4, 1))
   invisible(model)
 }
 
@@ -206,6 +223,19 @@ get_param.epiworld_model <- function(x, pname) {
 
 
 #' @export
+#' @rdname epiworld-methods
+#' @returns
+#' - `add_param` returns the model with the added parameter invisibly.
+add_param <- function(x, pname, pval) UseMethod("add_param")
+
+#' @export
+#' @rdname epiworld-methods
+add_param.epiworld_model <- function(x, pname, pval) {
+  invisible(add_param_cpp(x, pname, pval))
+}
+
+
+#' @export
 #' @param pval Numeric. Value of the parameter.
 #' @returns
 #' - The `set_param` function does not return a value but instead alters a
@@ -216,7 +246,6 @@ set_param <- function(x, pname, pval) UseMethod("set_param")
 #' @export
 set_param.epiworld_model <- function(x, pname, pval) {
   invisible(set_param_cpp(x, pname, pval))
-  invisible(x)
 }
 
 #' @export
@@ -272,6 +301,16 @@ get_ndays <- function(x) UseMethod("get_ndays")
 
 #' @export
 get_ndays.epiworld_model <- function(x) get_ndays_cpp(x)
+
+
+#' @export
+#' @rdname epiworld-methods
+#' @returns
+#' - `today` returns the current model day
+today <- function(x) UseMethod("today")
+
+#' @export
+today.epiworld_model <- function(x) today_cpp(x)
 
 
 #' @export
