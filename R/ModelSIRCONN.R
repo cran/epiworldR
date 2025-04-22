@@ -5,8 +5,6 @@
 #' @param transmission_rate Numeric scalar between 0 and 1. Probability of
 #' transmission.
 #' @param recovery_rate Numeric scalar between 0 and 1. Probability of recovery.
-#' @param x Object of class SIRCONN.
-#' @param ... Currently ignore.
 #' @param n Number of individuals in the population.
 #' @export
 #' @family Models
@@ -37,6 +35,13 @@
 ModelSIRCONN <- function(
     name, n, prevalence, contact_rate, transmission_rate, recovery_rate
     ) {
+  # Check inputs
+  stopifnot_string(name)
+  stopifnot_int(n)
+  stopifnot_double(prevalence)
+  stopifnot_double(contact_rate)
+  stopifnot_double(transmission_rate)
+  stopifnot_double(recovery_rate)
 
   structure(
     ModelSIRCONN_cpp(name, n, prevalence, contact_rate,
@@ -44,13 +49,4 @@ ModelSIRCONN <- function(
     class = c("epiworld_sirconn", "epiworld_model")
   )
 
-}
-
-#' @rdname ModelSIRCONN
-#' @export
-#' @returns The `plot` function returns a plot of the SIRCONN model of class
-#' [epiworld_model].
-#' @param main Title of the plot
-plot.epiworld_sirconn <- function(x, main = get_name(x), ...) { # col = NULL
-  plot_epi(x, main = main, ...)
 }

@@ -32,6 +32,16 @@ finals   <- get_today_total(model_sir) |> prettyNum(big.mark = ",")
 tmat     <- get_transition_probability(model_sir)
 tmat     <- round(tmat, digits = 2)
 
+## ----mermaid-diagram----------------------------------------------------------
+library(DiagrammeR)
+# Capture the output of the draw_mermaid function
+m_diagram <- draw_mermaid(model_sir)
+# Modify first line for compatibility with DiagrammeR
+# - Necessary because DiagrammeR uses old version of mermaid.js
+m_diagram <- paste0("graph", substring(m_diagram, 10))
+
+mermaid(m_diagram)
+
 ## ----showing-methods----------------------------------------------------------
 methods(class = "epiworld_model")
 

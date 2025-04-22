@@ -8,8 +8,6 @@
 #' infection.
 #' @param recovery_rate Numeric scalar between 0 and 1. Rate of recovery from virus.
 #' @param death_rate Numeric scalar between 0 and 1. Rate of death from virus.
-#' @param x Object of class SISD.
-#' @param ... Currently ignore.
 #' @export
 #' @family Models
 #' @returns
@@ -42,22 +40,21 @@
 #'
 #' @seealso epiworld-methods
 ModelSISD <- function(
-    name, prevalence, transmission_rate, recovery_rate, death_rate) {
+    name,
+    prevalence,
+    transmission_rate,
+    recovery_rate,
+    death_rate) {
+  # Check input parameters
+  stopifnot_string(name)
+  stopifnot_double(prevalence)
+  stopifnot_double(transmission_rate)
+  stopifnot_double(recovery_rate)
+  stopifnot_double(death_rate)
 
   structure(
     ModelSISD_cpp(name, prevalence, transmission_rate, recovery_rate, death_rate),
     class = c("epiworld_sisd", "epiworld_model")
   )
 
-}
-
-
-#' @rdname ModelSISD
-#' @export
-#' @returns
-#' - The `plot` function returns a plot of the SISD model of class
-#' [epiworld_model].
-#' @param main Title of the plot.
-plot.epiworld_sisd <- function(x, main = get_name(x), ...) { # col = NULL
-  plot_epi(x, main = main, ...)
 }

@@ -293,7 +293,7 @@ extern "C" SEXP _epiworldR_ModelSURV_cpp(SEXP name, SEXP prevalence, SEXP effica
   END_CPP11
 }
 // epimodels.cpp
-    SEXP ModelSEIR_cpp(std::string name, double prevalence, double transmission_rate, double incubation_days, double recovery_rate);
+SEXP ModelSEIR_cpp(std::string name, double prevalence, double transmission_rate, double incubation_days, double recovery_rate);
 extern "C" SEXP _epiworldR_ModelSEIR_cpp(SEXP name, SEXP prevalence, SEXP transmission_rate, SEXP incubation_days, SEXP recovery_rate) {
   BEGIN_CPP11
     return cpp11::as_sexp(ModelSEIR_cpp(cpp11::as_cpp<cpp11::decay_t<std::string>>(name), cpp11::as_cpp<cpp11::decay_t<double>>(prevalence), cpp11::as_cpp<cpp11::decay_t<double>>(transmission_rate), cpp11::as_cpp<cpp11::decay_t<double>>(incubation_days), cpp11::as_cpp<cpp11::decay_t<double>>(recovery_rate)));
@@ -388,6 +388,13 @@ SEXP ModelSEIRMixing_cpp(std::string name, unsigned int n, double prevalence, do
 extern "C" SEXP _epiworldR_ModelSEIRMixing_cpp(SEXP name, SEXP n, SEXP prevalence, SEXP contact_rate, SEXP transmission_rate, SEXP incubation_days, SEXP recovery_rate, SEXP contact_matrix) {
   BEGIN_CPP11
     return cpp11::as_sexp(ModelSEIRMixing_cpp(cpp11::as_cpp<cpp11::decay_t<std::string>>(name), cpp11::as_cpp<cpp11::decay_t<unsigned int>>(n), cpp11::as_cpp<cpp11::decay_t<double>>(prevalence), cpp11::as_cpp<cpp11::decay_t<double>>(contact_rate), cpp11::as_cpp<cpp11::decay_t<double>>(transmission_rate), cpp11::as_cpp<cpp11::decay_t<double>>(incubation_days), cpp11::as_cpp<cpp11::decay_t<double>>(recovery_rate), cpp11::as_cpp<cpp11::decay_t<std::vector< double >>>(contact_matrix)));
+  END_CPP11
+}
+// epimodels.cpp
+SEXP ModelMeaslesQuarantine_cpp(unsigned int n, unsigned int prevalence, double contact_rate, double transmission_rate, double vax_efficacy, double vax_reduction_recovery_rate, double incubation_period, double prodromal_period, double rash_period, double days_undetected, double hospitalization_rate, double hospitalization_duration, double prop_vaccinated, unsigned int quarantine_days, double quarantine_willingness);
+extern "C" SEXP _epiworldR_ModelMeaslesQuarantine_cpp(SEXP n, SEXP prevalence, SEXP contact_rate, SEXP transmission_rate, SEXP vax_efficacy, SEXP vax_reduction_recovery_rate, SEXP incubation_period, SEXP prodromal_period, SEXP rash_period, SEXP days_undetected, SEXP hospitalization_rate, SEXP hospitalization_duration, SEXP prop_vaccinated, SEXP quarantine_days, SEXP quarantine_willingness) {
+  BEGIN_CPP11
+    return cpp11::as_sexp(ModelMeaslesQuarantine_cpp(cpp11::as_cpp<cpp11::decay_t<unsigned int>>(n), cpp11::as_cpp<cpp11::decay_t<unsigned int>>(prevalence), cpp11::as_cpp<cpp11::decay_t<double>>(contact_rate), cpp11::as_cpp<cpp11::decay_t<double>>(transmission_rate), cpp11::as_cpp<cpp11::decay_t<double>>(vax_efficacy), cpp11::as_cpp<cpp11::decay_t<double>>(vax_reduction_recovery_rate), cpp11::as_cpp<cpp11::decay_t<double>>(incubation_period), cpp11::as_cpp<cpp11::decay_t<double>>(prodromal_period), cpp11::as_cpp<cpp11::decay_t<double>>(rash_period), cpp11::as_cpp<cpp11::decay_t<double>>(days_undetected), cpp11::as_cpp<cpp11::decay_t<double>>(hospitalization_rate), cpp11::as_cpp<cpp11::decay_t<double>>(hospitalization_duration), cpp11::as_cpp<cpp11::decay_t<double>>(prop_vaccinated), cpp11::as_cpp<cpp11::decay_t<unsigned int>>(quarantine_days), cpp11::as_cpp<cpp11::decay_t<double>>(quarantine_willingness)));
   END_CPP11
 }
 // lfmcmc.cpp
@@ -621,6 +628,30 @@ extern "C" SEXP _epiworldR_print_lfmcmc_cpp(SEXP lfmcmc, SEXP burnin) {
     return cpp11::as_sexp(print_lfmcmc_cpp(cpp11::as_cpp<cpp11::decay_t<SEXP>>(lfmcmc), cpp11::as_cpp<cpp11::decay_t<int>>(burnin)));
   END_CPP11
 }
+// model-diagram.cpp
+void draw_from_data_cpp(const std::vector< std::string > & states, const std::vector< epiworld_double > & tprob, const std::string & fn_output, bool self);
+extern "C" SEXP _epiworldR_draw_from_data_cpp(SEXP states, SEXP tprob, SEXP fn_output, SEXP self) {
+  BEGIN_CPP11
+    draw_from_data_cpp(cpp11::as_cpp<cpp11::decay_t<const std::vector< std::string > &>>(states), cpp11::as_cpp<cpp11::decay_t<const std::vector< epiworld_double > &>>(tprob), cpp11::as_cpp<cpp11::decay_t<const std::string &>>(fn_output), cpp11::as_cpp<cpp11::decay_t<bool>>(self));
+    return R_NilValue;
+  END_CPP11
+}
+// model-diagram.cpp
+void draw_from_file_cpp(const std::string & fn_transition, const std::string & fn_output, bool self);
+extern "C" SEXP _epiworldR_draw_from_file_cpp(SEXP fn_transition, SEXP fn_output, SEXP self) {
+  BEGIN_CPP11
+    draw_from_file_cpp(cpp11::as_cpp<cpp11::decay_t<const std::string &>>(fn_transition), cpp11::as_cpp<cpp11::decay_t<const std::string &>>(fn_output), cpp11::as_cpp<cpp11::decay_t<bool>>(self));
+    return R_NilValue;
+  END_CPP11
+}
+// model-diagram.cpp
+void draw_from_files_cpp(const std::vector< std::string > & fns_transition, const std::string & fn_output, bool self);
+extern "C" SEXP _epiworldR_draw_from_files_cpp(SEXP fns_transition, SEXP fn_output, SEXP self) {
+  BEGIN_CPP11
+    draw_from_files_cpp(cpp11::as_cpp<cpp11::decay_t<const std::vector< std::string > &>>(fns_transition), cpp11::as_cpp<cpp11::decay_t<const std::string &>>(fn_output), cpp11::as_cpp<cpp11::decay_t<bool>>(self));
+    return R_NilValue;
+  END_CPP11
+}
 // model.cpp
 SEXP print_cpp(SEXP m, bool lite);
 extern "C" SEXP _epiworldR_print_cpp(SEXP m, SEXP lite) {
@@ -822,6 +853,14 @@ SEXP clone_model_cpp(const SEXP & model);
 extern "C" SEXP _epiworldR_clone_model_cpp(SEXP model) {
   BEGIN_CPP11
     return cpp11::as_sexp(clone_model_cpp(cpp11::as_cpp<cpp11::decay_t<const SEXP &>>(model)));
+  END_CPP11
+}
+// model.cpp
+void draw_mermaid_cpp(SEXP model, std::string fn_output, bool self);
+extern "C" SEXP _epiworldR_draw_mermaid_cpp(SEXP model, SEXP fn_output, SEXP self) {
+  BEGIN_CPP11
+    draw_mermaid_cpp(cpp11::as_cpp<cpp11::decay_t<SEXP>>(model), cpp11::as_cpp<cpp11::decay_t<std::string>>(fn_output), cpp11::as_cpp<cpp11::decay_t<bool>>(self));
+    return R_NilValue;
   END_CPP11
 }
 // tool.cpp
@@ -1158,6 +1197,7 @@ extern "C" {
 static const R_CallMethodDef CallEntries[] = {
     {"_epiworldR_LFMCMC_cpp",                           (DL_FUNC) &_epiworldR_LFMCMC_cpp,                            1},
     {"_epiworldR_ModelDiffNet_cpp",                     (DL_FUNC) &_epiworldR_ModelDiffNet_cpp,                      8},
+    {"_epiworldR_ModelMeaslesQuarantine_cpp",           (DL_FUNC) &_epiworldR_ModelMeaslesQuarantine_cpp,           15},
     {"_epiworldR_ModelSEIRCONN_cpp",                    (DL_FUNC) &_epiworldR_ModelSEIRCONN_cpp,                     7},
     {"_epiworldR_ModelSEIRDCONN_cpp",                   (DL_FUNC) &_epiworldR_ModelSEIRDCONN_cpp,                    8},
     {"_epiworldR_ModelSEIRD_cpp",                       (DL_FUNC) &_epiworldR_ModelSEIRD_cpp,                        6},
@@ -1189,6 +1229,10 @@ static const R_CallMethodDef CallEntries[] = {
     {"_epiworldR_distribute_tool_to_set_cpp",           (DL_FUNC) &_epiworldR_distribute_tool_to_set_cpp,            1},
     {"_epiworldR_distribute_virus_randomly_cpp",        (DL_FUNC) &_epiworldR_distribute_virus_randomly_cpp,         2},
     {"_epiworldR_distribute_virus_to_set_cpp",          (DL_FUNC) &_epiworldR_distribute_virus_to_set_cpp,           1},
+    {"_epiworldR_draw_from_data_cpp",                   (DL_FUNC) &_epiworldR_draw_from_data_cpp,                    4},
+    {"_epiworldR_draw_from_file_cpp",                   (DL_FUNC) &_epiworldR_draw_from_file_cpp,                    3},
+    {"_epiworldR_draw_from_files_cpp",                  (DL_FUNC) &_epiworldR_draw_from_files_cpp,                   3},
+    {"_epiworldR_draw_mermaid_cpp",                     (DL_FUNC) &_epiworldR_draw_mermaid_cpp,                      3},
     {"_epiworldR_entity_add_agent_cpp",                 (DL_FUNC) &_epiworldR_entity_add_agent_cpp,                  3},
     {"_epiworldR_entity_cpp",                           (DL_FUNC) &_epiworldR_entity_cpp,                            4},
     {"_epiworldR_entity_get_agents_cpp",                (DL_FUNC) &_epiworldR_entity_get_agents_cpp,                 1},

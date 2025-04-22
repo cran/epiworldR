@@ -1,13 +1,3 @@
-stopifnot_model <- function(model) {
-  if (!inherits(model, "epiworld_model")) {
-    stop(
-      "The -model- object must be of class \"epiworld_model\". ",
-      "The object passed to the function is of class(es): ",
-      paste(class(model), collapse = ", ")
-    )
-  }
-}
-
 #' Methods for epiworldR objects
 #'
 #' The functions described in this section are methods for objects of class
@@ -104,6 +94,9 @@ stopifnot_model <- function(model) {
 #' get_tool(model_sirconn, 0) # Returns information about the first tool in the
 #' # model. In this case, there are no tools so an
 #' # error message will occur.
+#'
+#' # Draw a mermaid diagram of the transitions
+#' draw_mermaid(model_sirconn)
 queuing_on <- function(x) UseMethod("queuing_on")
 
 #' @export
@@ -417,4 +410,44 @@ clone_model <- function(model) {
     clone_model_cpp(model),
     class = class(model)
   )
+}
+
+#' @rdname epiworld-methods
+#' @export
+#' @inheritParams epiworld-model-diagram
+#' @details `draw_mermaid` generates a mermaid diagram of the model. The
+#' diagram is saved in the specified output file (or printed to the standard
+#' output if the filename is empty).
+#' @return
+#' - The `draw_mermaid` returns the mermaid diagram as a string.
+#' @importFrom utils capture.output
+draw_mermaid <- function(
+    model,
+    output_file = "",
+    allow_self_transitions = FALSE
+    ) {
+  stopifnot_model(model)
+  stopifnot_string(output_file)
+  stopifnot_bool(allow_self_transitions)
+
+  if (output_file != "") {
+    draw_mermaid_cpp(
+      model,
+      output_file,
+      allow_self_transitions
+    )
+
+    message("Diagram written to ", output_file)
+
+    diagram <- readChar(output_file, file.info(output_file)$size)
+    return(diagram)
+  } else {
+    diagram <- capture.output(draw_mermaid_cpp(
+      model,
+      output_file,
+      allow_self_transitions
+    ))
+
+    return(paste(diagram, collapse = "\n"))
+  }
 }

@@ -21,8 +21,6 @@
 #' @param prob_death Double. Raw probability of death for symptomatic
 #' individuals.
 #' @param prob_noreinfect Double. Probability of no re-infection.
-#' @param x Object of class SURV.
-#' @param ... Currently ignore.
 #' @export
 #' @family Models
 #' @aliases epiworld_surv
@@ -63,10 +61,34 @@
 #'
 #' @seealso epiworld-methods
 ModelSURV <- function(
-    name, prevalence, efficacy_vax, latent_period, infect_period, prob_symptoms,
-    prop_vaccinated, prop_vax_redux_transm, prop_vax_redux_infect,
-    surveillance_prob, transmission_rate, prob_death, prob_noreinfect
+    name,
+    prevalence,
+    efficacy_vax,
+    latent_period,
+    infect_period,
+    prob_symptoms,
+    prop_vaccinated,
+    prop_vax_redux_transm,
+    prop_vax_redux_infect,
+    surveillance_prob,
+    transmission_rate,
+    prob_death,
+    prob_noreinfect
     ) {
+  # Check input parameters
+  stopifnot_string(name)
+  stopifnot_double(prevalence)
+  stopifnot_double(efficacy_vax)
+  stopifnot_double(latent_period)
+  stopifnot_double(infect_period)
+  stopifnot_double(prob_symptoms)
+  stopifnot_double(prop_vaccinated)
+  stopifnot_double(prop_vax_redux_transm)
+  stopifnot_double(prop_vax_redux_infect)
+  stopifnot_double(surveillance_prob)
+  stopifnot_double(transmission_rate)
+  stopifnot_double(prob_death)
+  stopifnot_double(prob_noreinfect)
 
   structure(
     ModelSURV_cpp(name, prevalence, efficacy_vax, latent_period, infect_period,
@@ -76,13 +98,4 @@ ModelSURV <- function(
     class = c("epiworld_surv", "epiworld_model")
   )
 
-}
-
-#' @rdname ModelSURV
-#' @export
-#' @returns The `plot` function returns a plot of the SURV model of class
-#' [epiworld_model].
-#' @param main Title of the plot.
-plot.epiworld_surv <- function(x, main = get_name(x), ...) { # col = NULL
-  plot_epi(x, main = main, ...)
 }

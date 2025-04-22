@@ -3,7 +3,6 @@
 \name{ModelDiffNet}
 \alias{ModelDiffNet}
 \alias{epiworld_diffnet}
-\alias{plot.epiworld_diffnet}
 \title{Network Diffusion Model}
 \usage{
 ModelDiffNet(
@@ -15,8 +14,6 @@ ModelDiffNet(
   data_cols = 1L:ncol(data),
   params = vector("double")
 )
-
-\method{plot}{epiworld_diffnet}(x, main = get_name(x), ...)
 }
 \arguments{
 \item{name}{Name of the model.}
@@ -32,12 +29,6 @@ ModelDiffNet(
 \item{data_cols}{Data columns.}
 
 \item{params}{Parameters.}
-
-\item{x}{Object of class \link{epiworld_diffnet}.}
-
-\item{main}{Title of the plot}
-
-\item{...}{Passed to \link[graphics:plot.default]{graphics::plot}.}
 }
 \value{
 An object of class \link{epiworld_diffnet} and \link{epiworld_model}.
@@ -90,6 +81,7 @@ plot(adopt_chatgpt)
 }
 \seealso{
 Other Models: 
+\code{\link{ModelMeaslesQuarantine}()},
 \code{\link{ModelSEIR}()},
 \code{\link{ModelSEIRCONN}()},
 \code{\link{ModelSEIRD}()},

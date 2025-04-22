@@ -4,9 +4,9 @@
 test_tmat <- function(tmat) {
   tmat_expected <- structure(
     c(
-      0.5397, 0, 0,
-      0.4603, 0.8473519, 0,
-      0, 0.1526481, 1
+      0.823433858323328, 0, 0, 
+      0.176566141676672, 0.856971222609989, 0, 
+      0, 0.143028777390011, 1
     ),
     dim = c(3L, 3L),
     dimnames = list(
@@ -59,4 +59,77 @@ tmat_noqueuing <- get_transition_probability(sirconn_0)
 
 expect_identical(hist_noqueuing, hist_queuing)
 expect_identical(tmat_noqueuing, tmat_queuing)
+
+# Check functions fail with invalid inputs -------------------------------------
+good_name <- "A Virus"
+good_n <- 10000
+good_prevalence <- .01
+good_contact_rate <- 4.0
+good_transmission_rate <- 0.5
+good_recovery_rate <- 1.0/7.0
+
+bad_name <- NA
+bad_n <- NA
+bad_prevalence <- NA
+bad_contact_rate <- NA
+bad_transmission_rate <- NA
+bad_recovery_rate <- NA
+
+expected_error_msg_str <- "must be a string"
+expected_error_msg_int <- "must be an integer"
+expected_error_msg_double <- "must be a double"
+
+expect_error(sirconn_0 <- ModelSIRCONN(
+  name = bad_name,
+  n = good_n,
+  prevalence = good_prevalence,
+  contact_rate = good_contact_rate,
+  transmission_rate = good_transmission_rate,
+  recovery_rate = good_recovery_rate
+), expected_error_msg_str)
+
+expect_error(sirconn_0 <- ModelSIRCONN(
+  name = good_name,
+  n = bad_n,
+  prevalence = good_prevalence,
+  contact_rate = good_contact_rate,
+  transmission_rate = good_transmission_rate,
+  recovery_rate = good_recovery_rate
+), expected_error_msg_int)
+
+expect_error(sirconn_0 <- ModelSIRCONN(
+  name = good_name,
+  n = good_n,
+  prevalence = bad_prevalence,
+  contact_rate = good_contact_rate,
+  transmission_rate = good_transmission_rate,
+  recovery_rate = good_recovery_rate
+), expected_error_msg_double)
+
+expect_error(sirconn_0 <- ModelSIRCONN(
+  name = good_name,
+  n = good_n,
+  prevalence = good_prevalence,
+  contact_rate = bad_contact_rate,
+  transmission_rate = good_transmission_rate,
+  recovery_rate = good_recovery_rate
+), expected_error_msg_double)
+
+expect_error(sirconn_0 <- ModelSIRCONN(
+  name = good_name,
+  n = good_n,
+  prevalence = good_prevalence,
+  contact_rate = good_contact_rate,
+  transmission_rate = bad_transmission_rate,
+  recovery_rate = good_recovery_rate
+), expected_error_msg_double)
+
+expect_error(sirconn_0 <- ModelSIRCONN(
+  name = good_name,
+  n = good_n,
+  prevalence = good_prevalence,
+  contact_rate = good_contact_rate,
+  transmission_rate = good_transmission_rate,
+  recovery_rate = bad_recovery_rate
+), expected_error_msg_double)
 

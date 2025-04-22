@@ -8,8 +8,6 @@
 #' incubation days.
 #' @param recovery_rate Numeric scalar between 0 and 1. Rate of recovery_rate from virus.
 #' @param death_rate Numeric scalar between 0 and 1. Rate of death from virus.
-#' @param x Object of class SEIRD.
-#' @param ... Currently ignore.
 #' @export
 #' @details
 #' The [initial_states] function allows the user to set the initial state of the
@@ -49,6 +47,13 @@ ModelSEIRD <- function(
     recovery_rate,
     death_rate
     ) {
+  # Check input parameters
+  stopifnot_string(name)
+  stopifnot_double(prevalence)
+  stopifnot_double(transmission_rate)
+  stopifnot_double(incubation_days)
+  stopifnot_double(recovery_rate)
+  stopifnot_double(death_rate)
 
   structure(
     ModelSEIRD_cpp(
@@ -62,13 +67,4 @@ ModelSEIRD <- function(
     class = c("epiworld_seird", "epiworld_model")
   )
 
-}
-
-#' @rdname ModelSEIRD
-#' @param main Title of the plot
-#' @returns The `plot` function returns a plot of the SEIRD model of class
-#' [epiworld_model].
-#' @export
-plot.epiworld_seird <- function(x, main = get_name(x), ...) { # col = NULL
-  plot_epi(x, main = main, ...)
 }

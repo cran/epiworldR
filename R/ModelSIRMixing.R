@@ -5,8 +5,6 @@
 #' @param transmission_rate Numeric scalar between 0 and 1. Probability of
 #' transmission.
 #' @param recovery_rate Numeric scalar between 0 and 1. Probability of recovery.
-#' @param x Object of class SIRCONN.
-#' @param ... Currently ignore.
 #' @param n Number of individuals in the population.
 #' @param contact_matrix Matrix of contact rates between individuals.
 #' @export
@@ -64,9 +62,22 @@
 #'
 #' @seealso epiworld-methods
 ModelSIRMixing <- function(
-    name, n, prevalence, contact_rate, transmission_rate, recovery_rate,
+    name,
+    n,
+    prevalence,
+    contact_rate,
+    transmission_rate,
+    recovery_rate,
     contact_matrix
     ) {
+  # Check input parameters
+  stopifnot_string(name)
+  stopifnot_int(n)
+  stopifnot_double(prevalence)
+  stopifnot_double(contact_rate)
+  stopifnot_double(transmission_rate)
+  stopifnot_double(recovery_rate)
+  stopifany_na(contact_matrix)
 
   structure(
     ModelSIRMixing_cpp(
@@ -76,13 +87,4 @@ ModelSIRMixing <- function(
     class = c("epiworld_sirmixing", "epiworld_model")
   )
 
-}
-
-#' @rdname ModelSIRMixing
-#' @export
-#' @returns The `plot` function returns a plot of the SIRMixing model of class
-#' [epiworld_model].
-#' @param main Title of the plot
-plot.epiworld_sirmixing <- function(x, main = get_name(x), ...) { # col = NULL
-  plot_epi(x, main = main, ...)
 }

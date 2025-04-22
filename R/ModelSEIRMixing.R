@@ -7,8 +7,6 @@
 #' @param incubation_days Numeric scalar. Average number of days in the
 #' incubation period.
 #' @param recovery_rate Numeric scalar between 0 and 1. Probability of recovery.
-#' @param x Object of class SIRCONN.
-#' @param ... Currently ignore.
 #' @param n Number of individuals in the population.
 #' @param contact_matrix Matrix of contact rates between individuals.
 #' @export
@@ -66,9 +64,24 @@
 #'
 #' @seealso epiworld-methods
 ModelSEIRMixing <- function(
-    name, n, prevalence, contact_rate, transmission_rate,
-    incubation_days, recovery_rate, contact_matrix
+    name,
+    n,
+    prevalence,
+    contact_rate,
+    transmission_rate,
+    incubation_days,
+    recovery_rate,
+    contact_matrix
     ) {
+  # Check input parameters
+  stopifnot_string(name)
+  stopifnot_int(n)
+  stopifnot_double(prevalence)
+  stopifnot_double(contact_rate)
+  stopifnot_double(transmission_rate)
+  stopifnot_double(incubation_days)
+  stopifnot_double(recovery_rate)
+  stopifany_na(contact_matrix)
 
   structure(
     ModelSEIRMixing_cpp(
@@ -79,13 +92,4 @@ ModelSEIRMixing <- function(
     class = c("epiworld_seirmixing", "epiworld_model")
   )
 
-}
-
-#' @rdname ModelSEIRMixing
-#' @export
-#' @returns The `plot` function returns a plot of the SEIRMixing model of class
-#' [epiworld_model].
-#' @param main Title of the plot
-plot.epiworld_seirmixing <- function(x, main = get_name(x), ...) { # col = NULL
-  plot_epi(x, main = main, ...)
 }

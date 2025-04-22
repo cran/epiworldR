@@ -64,6 +64,14 @@ ModelDiffNet <- function(
     data_cols          = 1L:ncol(data),
     params             = vector("double")
     ) {
+  # Check input params
+  stopifnot_string(name)
+  stopifnot_double(prevalence)
+  stopifnot_double(prob_adopt)
+  stopifnot_bool(normalize_exposure)
+  stopifany_na(data)
+  stopifnot_numvector(data_cols)
+  stopifnot_numvector(params)
 
   if (length(data) == 0L)
     data_cols <- vector("integer")
@@ -84,13 +92,4 @@ ModelDiffNet <- function(
     class = c("epiworld_diffnet", "epiworld_model")
   )
 
-}
-
-#' @rdname ModelDiffNet
-#' @param main Title of the plot
-#' @param ... Passed to [graphics::plot].
-#' @param x Object of class [epiworld_diffnet].
-#' @export
-plot.epiworld_diffnet <- function(x, main = get_name(x), ...) {
-  plot_epi(x, main = main, ...)
 }
