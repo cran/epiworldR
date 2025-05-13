@@ -1,7 +1,7 @@
 Package: epiworldR
 Type: Package
 Title: Fast Agent-Based Epi Models
-Version: 0.8.1.0
+Version: 0.8.2.0
 Depends: R (>= 4.1.0)
 Authors@R: c(
   person(given="George", family="Vega Yon", role=c("aut"),
@@ -28,20 +28,21 @@ Encoding: UTF-8
 LinkingTo: cpp11
 Suggests: knitr, rmarkdown, tinytest, netplot, igraph, data.table,
         DiagrammeR
-Imports: utils
+Imports: utils, parallel
 VignetteBuilder: knitr
 NeedsCompilation: yes
-Packaged: 2025-04-22 21:45:32 UTC; runner
-Author: George Vega Yon [aut] (<https://orcid.org/0000-0002-3171-0844>),
-  Derek Meyer [aut] (<https://orcid.org/0009-0005-1350-6988>),
-  Andrew Pulsipher [aut, cre] (<https://orcid.org/0000-0002-0773-3210>),
-  Susan Holmes [rev] (JOSS reviewer,
+Packaged: 2025-05-13 18:23:46 UTC; runner
+Author: George Vega Yon [aut] (ORCID: <https://orcid.org/0000-0002-3171-0844>),
+  Derek Meyer [aut] (ORCID: <https://orcid.org/0009-0005-1350-6988>),
+  Andrew Pulsipher [aut, cre] (ORCID:
+    <https://orcid.org/0000-0002-0773-3210>),
+  Susan Holmes [rev] (what: JOSS reviewer, ORCID:
     <https://orcid.org/0000-0002-2208-8168>),
-  Abinash Satapathy [rev] (JOSS reviewer,
+  Abinash Satapathy [rev] (what: JOSS reviewer, ORCID:
     <https://orcid.org/0000-0002-2955-2744>),
   Carinogurjao [rev],
   Centers for Disease Control and Prevention [fnd] (Award number
     1U01CK000585; 75D30121F00003)
 Maintainer: Andrew Pulsipher <pulsipher.a@gmail.com>
 Repository: CRAN
-Date/Publication: 2025-04-22 22:10:06 UTC
+Date/Publication: 2025-05-13 19:20:02 UTC

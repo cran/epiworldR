@@ -25,17 +25,17 @@ run_multiple(model_seirconn, ndays = 50, nsims = 50, saver = saver, nthreads = 2
 
 ## ----retrieving results-------------------------------------------------------
 # Retrieving the results
-ans <- run_multiple_get_results(model_seirconn)
+ans <- run_multiple_get_results(model_seirconn, nthreads = 2)
 head(ans$total_hist)
 head(ans$reproductive)
 
 ## ----plotting seirconn epicurves----------------------------------------------
-seirconn_50 <- run_multiple_get_results(model_seirconn)$total_hist
+seirconn_50 <- ans$total_hist
 seirconn_50 <- seirconn_50[seirconn_50$date <= 20, ]
 plot(seirconn_50)
 
 ## ----reproductive number plot-------------------------------------------------
-seirconn_50_r <- run_multiple_get_results(model_seirconn)$reproductive
+seirconn_50_r <- ans$reproductive
 plot(seirconn_50_r)
 # boxplot(rt ~ source_exposure_date, data = seirconn_50_r,
 #         main = "Reproductive Number",

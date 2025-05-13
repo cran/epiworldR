@@ -15,6 +15,8 @@
 #include <sstream>
 #include <iomanip>
 #include <set>
+#include <type_traits>
+#include <cassert>
 
 #ifndef EPIWORLD_HPP
 #define EPIWORLD_HPP
@@ -22,7 +24,7 @@
 /* Versioning */
 #define EPIWORLD_VERSION_MAJOR 0
 #define EPIWORLD_VERSION_MINOR 8
-#define EPIWORLD_VERSION_PATCH 1
+#define EPIWORLD_VERSION_PATCH 2
 
 static const int epiworld_version_major = EPIWORLD_VERSION_MAJOR;
 static const int epiworld_version_minor = EPIWORLD_VERSION_MINOR;
@@ -86,9 +88,6 @@ namespace epiworld {
     #include "agent-meat.hpp"
 
     #include "agentssample-bones.hpp"
-
-    #include "groupsampler-bones.hpp"
-    #include "groupsampler-meat.hpp"
 
     #include "models/models.hpp"
 
