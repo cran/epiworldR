@@ -34,6 +34,11 @@ model. The user must provide a vector of proportions indicating the following
 values: (1) Proportion of non-infected agents who are removed, and (2)
 Proportion of exposed agents to be set as infected.
 }
+\section{Model diagram}{
+
+\figure{seir.png}{SEIR Diagram}
+}
+
 \examples{
 model_seir <- ModelSEIR(name = "COVID-19", prevalence = 0.01,
   transmission_rate = 0.9, recovery_rate = 0.1, incubation_days = 4)
@@ -58,11 +63,14 @@ epiworld-methods
 
 Other Models: 
 \code{\link{ModelDiffNet}()},
-\code{\link{ModelMeaslesQuarantine}()},
+\code{\link{ModelMeaslesMixing}()},
+\code{\link{ModelMeaslesMixingRiskQuarantine}()},
+\code{\link{ModelMeaslesSchool}()},
 \code{\link{ModelSEIRCONN}()},
 \code{\link{ModelSEIRD}()},
 \code{\link{ModelSEIRDCONN}()},
 \code{\link{ModelSEIRMixing}()},
+\code{\link{ModelSEIRMixingQuarantine}()},
 \code{\link{ModelSIR}()},
 \code{\link{ModelSIRCONN}()},
 \code{\link{ModelSIRD}()},
@@ -75,3 +83,4 @@ Other Models:
 \code{\link{epiworld-data}}
 }
 \concept{Models}
+\concept{general-models}

@@ -11,6 +11,7 @@
 #' @param contact_matrix Matrix of contact rates between individuals.
 #' @export
 #' @family Models
+#' @concept general-models
 #' @details
 #' The `contact_matrix` is a matrix of contact rates between entities. The
 #' matrix should be of size `n x n`, where `n` is the number of entities.
@@ -19,6 +20,11 @@
 #' The [initial_states] function allows the user to set the initial state of the
 #' model. In particular, the user can specify how many of the non-infected
 #' agents have been removed at the beginning of the simulation.
+#'
+#' @section Model diagram:
+#'
+#' ![](seirmixing.png "SEIR Mixing Diagram")
+#'
 #' @returns
 #' - The `ModelSEIRMixing`function returns a model of class [epiworld_model].
 #' @aliases epiworld_seirmixing
@@ -64,15 +70,15 @@
 #'
 #' @seealso epiworld-methods
 ModelSEIRMixing <- function(
-    name,
-    n,
-    prevalence,
-    contact_rate,
-    transmission_rate,
-    incubation_days,
-    recovery_rate,
-    contact_matrix
-    ) {
+  name,
+  n,
+  prevalence,
+  contact_rate,
+  transmission_rate,
+  incubation_days,
+  recovery_rate,
+  contact_matrix
+) {
   # Check input parameters
   stopifnot_string(name)
   stopifnot_int(n)

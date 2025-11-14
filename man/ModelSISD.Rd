@@ -27,6 +27,11 @@ infection.}
 \description{
 Susceptible-Infected-Susceptible-Deceased model (SISD) (\href{https://en.wikipedia.org/w/index.php?title=Compartmental_models_in_epidemiology&oldid=1155757336#The_SIS_model}{wiki})
 }
+\section{Model diagram}{
+
+\figure{sisd.png}{SISD Diagram}
+}
+
 \examples{
 model_sisd <- ModelSISD(
   name = "COVID-19",
@@ -58,12 +63,15 @@ epiworld-methods
 
 Other Models: 
 \code{\link{ModelDiffNet}()},
-\code{\link{ModelMeaslesQuarantine}()},
+\code{\link{ModelMeaslesMixing}()},
+\code{\link{ModelMeaslesMixingRiskQuarantine}()},
+\code{\link{ModelMeaslesSchool}()},
 \code{\link{ModelSEIR}()},
 \code{\link{ModelSEIRCONN}()},
 \code{\link{ModelSEIRD}()},
 \code{\link{ModelSEIRDCONN}()},
 \code{\link{ModelSEIRMixing}()},
+\code{\link{ModelSEIRMixingQuarantine}()},
 \code{\link{ModelSIR}()},
 \code{\link{ModelSIRCONN}()},
 \code{\link{ModelSIRD}()},
@@ -75,3 +83,4 @@ Other Models:
 \code{\link{epiworld-data}}
 }
 \concept{Models}
+\concept{general-models}

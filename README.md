@@ -2,20 +2,18 @@
 
 <!-- README.md is generated from README.qmd. Please edit that file -->
 
-# epiworldR
+# epiworldR <img src="man/figures/logo.png" width="200px" alt="epiworld logo" align="right">
 
 <!-- badges: start -->
 
-[![CRAN
-status](https://www.r-pkg.org/badges/version/epiworldR.png)](https://CRAN.R-project.org/package=epiworldR)
+[![ForeSITE Group](https://github.com/EpiForeSITE/software/raw/e82ed88f75e0fe5c0a1a3b38c2b94509f122019c/docs/assets/foresite-software-badge.svg)](https://github.com/EpiForeSITE)
+[![CRAN status](https://www.r-pkg.org/badges/version/epiworldR)](https://CRAN.R-project.org/package=epiworldR)
 [![R-CMD-check](https://github.com/UofUEpiBio/epiworldR/actions/workflows/r.yml/badge.svg)](https://github.com/UofUEpiBio/epiworldR/actions/workflows/r.yml)
-[![CRANlogs
-downloads](https://cranlogs.r-pkg.org/badges/grand-total/epiworldR.png)](https://cran.r-project.org/package=epiworldR)
-[![License:
-MIT](https://img.shields.io/badge/License-MIT-yellow.svg)](https://github.com/UofUEpiBio/epiworldR/blob/master/LICENSE.md)
+[![CRANlogs downloads](https://cranlogs.r-pkg.org/badges/grand-total/epiworldR)](https://cran.r-project.org/package=epiworldR)
+[![License: MIT](https://img.shields.io/badge/License-MIT-yellow.svg)](https://github.com/UofUEpiBio/epiworldR/blob/master/LICENSE.md)
 [![codecov](https://codecov.io/gh/UofUEpiBio/epiworldR/graph/badge.svg?token=ZB8FVLI7GN)](https://app.codecov.io/gh/UofUEpiBio/epiworldR)
-[![ForeSITE
-Group](https://github.com/EpiForeSITE/software/raw/e82ed88f75e0fe5c0a1a3b38c2b94509f122019c/docs/assets/foresite-software-badge.svg)](https://github.com/EpiForeSITE)
+[![status](https://tinyverse.netlify.app/badge//epiworldR)](https://CRAN.R-project.org/package=epiworldR)
+
 <!-- badges: end -->
 
 This R package is a wrapper of the C++ library
@@ -50,21 +48,24 @@ Current available models:
 
 1.  `ModelDiagram`
 2.  `ModelDiffNet`
-3.  `ModelMeaslesQuarantine`
-4.  `ModelSEIR`
-5.  `ModelSEIRCONN`
-6.  `ModelSEIRD`
-7.  `ModelSEIRDCONN`
-8.  `ModelSEIRMixing`
-9.  `ModelSIR`
-10. `ModelSIRCONN`
-11. `ModelSIRD`
-12. `ModelSIRDCONN`
-13. `ModelSIRLogit`
-14. `ModelSIRMixing`
-15. `ModelSIS`
-16. `ModelSISD`
-17. `ModelSURV`
+3.  `ModelMeaslesMixing`
+4.  `ModelMeaslesMixingRiskQuarantine`
+5.  `ModelMeaslesSchool`
+6.  `ModelSEIR`
+7.  `ModelSEIRCONN`
+8.  `ModelSEIRD`
+9.  `ModelSEIRDCONN`
+10. `ModelSEIRMixing`
+11. `ModelSEIRMixingQuarantine`
+12. `ModelSIR`
+13. `ModelSIRCONN`
+14. `ModelSIRD`
+15. `ModelSIRDCONN`
+16. `ModelSIRLogit`
+17. `ModelSIRMixing`
+18. `ModelSIS`
+19. `ModelSISD`
+20. `ModelSURV`
 
 ## Installation
 
@@ -73,6 +74,20 @@ You can install the development version of epiworldR from
 
 ``` r
 devtools::install_github("UofUEpiBio/epiworldR")
+```
+
+Or from <a href="https://uofuepibio.r-universe.dev/"
+target="_blank">R-universe</a> (recommended for the latest development
+version):
+
+``` r
+install.packages(
+  'epiworldR',
+  repos = c(
+    'https://uofuepibio.r-universe.dev',
+    'https://cloud.r-project.org'
+  )
+)
 ```
 
 Or from CRAN
@@ -120,14 +135,15 @@ sir <- ModelSIR(
   run(ndays = 50, seed = 1912)
 #> _________________________________________________________________________
 #> |Running the model...
-#> |||||||||||||||||||||||||||||||||||||||||||||||||||||||||||||||||||||||||
+#> |||||||||||||||||||||||||||||||||||||||||||||||||||||||||||||||||||||||| done.
+#> |
 
 sir
 #> ________________________________________________________________________________
 #> Susceptible-Infected-Recovered (SIR)
 #> It features 100000 agents, 1 virus(es), and 0 tool(s).
 #> The model has 3 states.
-#> The final distribution is: 1209 Susceptible, 499 Infected, and 98292 Recovered.
+#> The final distribution is: 0 Susceptible, 0 Infected, and 100000 Recovered.
 ```
 
 Visualizing the outputs
@@ -144,8 +160,8 @@ summary(sir)
 #> Number of entities  : 0
 #> Days (duration)     : 50 (of 50)
 #> Number of viruses   : 1
-#> Last run elapsed t  : 132.00ms
-#> Last run speed      : 37.85 million agents x day / second
+#> Last run elapsed t  : 71.00ms
+#> Last run speed      : 69.45 million agents x day / second
 #> Rewiring            : off
 #>
 #> Global events:
@@ -162,12 +178,12 @@ summary(sir)
 #>  - Transmission rate : 0.7000
 #>
 #> Distribution of the population at time 50:
-#>   - (0) Susceptible :  99000 -> 1209
-#>   - (1) Infected    :   1000 -> 499
-#>   - (2) Recovered   :      0 -> 98292
+#>   - (0) Susceptible :  99000 -> 0
+#>   - (1) Infected    :   1000 -> 0
+#>   - (2) Recovered   :      0 -> 100000
 #>
 #> Transition Probabilities:
-#>  - Susceptible  0.92  0.08     -
+#>  - Susceptible  0.85  0.15     -
 #>  - Infected        -  0.70  0.30
 #>  - Recovered       -     -  1.00
 plot(sir)
@@ -213,7 +229,7 @@ set.seed(132)
 run(model_seirconn, ndays = 100)
 #> _________________________________________________________________________
 #> Running the model...
-#> |||||||||||||||||||||||||||||||||||||||||||||||||||||||||||||||||||||||||
+#> ||||||||||||||||||||||||||||||||||||||||||||||||||||||||||||||||||||||||| done.
 summary(model_seirconn)
 #> ________________________________________________________________________________
 #> ________________________________________________________________________________
@@ -225,8 +241,8 @@ summary(model_seirconn)
 #> Number of entities  : 0
 #> Days (duration)     : 100 (of 100)
 #> Number of viruses   : 2
-#> Last run elapsed t  : 143.00ms
-#> Last run speed      : 6.98 million agents x day / second
+#> Last run elapsed t  : 16.00ms
+#> Last run speed      : 59.03 million agents x day / second
 #> Rewiring            : off
 #>
 #> Global events:
@@ -345,7 +361,8 @@ agents_smallworld(model_logit, n, 8, FALSE, .01)
 run(model_logit, 50)
 #> _________________________________________________________________________
 #> |Running the model...
-#> |||||||||||||||||||||||||||||||||||||||||||||||||||||||||||||||||||||||||
+#> |||||||||||||||||||||||||||||||||||||||||||||||||||||||||||||||||||||||| done.
+#> |
 plot(model_logit)
 ```
 
@@ -361,7 +378,7 @@ rn <- get_reproductive_number(model_logit)
   (1:n %in% rn$source)
 ) |> prop.table())[, 2]
 #>       0       1
-#> 0.13505 0.14886
+#> 0.20717 0.22397
 
 # Looking into the agents
 get_agents(model_logit)
@@ -401,7 +418,8 @@ sir <- ModelSIR(
   run(ndays = 50, seed = 1912)
 #> _________________________________________________________________________
 #> |Running the model...
-#> |||||||||||||||||||||||||||||||||||||||||||||||||||||||||||||||||||||||||
+#> |||||||||||||||||||||||||||||||||||||||||||||||||||||||||||||||||||||||| done.
+#> |
 
 # Transmission network
 net <- get_transmissions(sir)
@@ -499,7 +517,7 @@ citation("epiworldR")
 #> And the actual R package:
 #>
 #>   Meyer D, Pulsipher A, Vega Yon G (2025). _epiworldR: Fast Agent-Based
-#>   Epi Models_. R package version 0.8.3.0,
+#>   Epi Models_. R package version 0.10.0.0,
 #>   <https://github.com/UofUEpiBio/epiworldR>.
 #>
 #> To see these entries in BibTeX format, use 'print(<citation>,
@@ -516,14 +534,14 @@ through agent-based modeling. Below is a manually curated table of
 existing alternatives, including ABM \[@ABM\], abmR \[@abmR\], cystiSim
 \[@cystiSim\], villager \[@villager\], and RNetLogo \[@RNetLogo\].
 
-| Package                                                       | Multiple Viruses | Multiple Tools | Multiple Runs | Global Actions | Built-In Epi Models | Dependencies                                                                                                 | Activity                                                                                                                   |
-|:--------------------------------------------------------------|:-----------------|:---------------|:--------------|:---------------|---------------------|:-------------------------------------------------------------------------------------------------------------|:---------------------------------------------------------------------------------------------------------------------------|
-| [**epiworldR**](https://cran.r-project.org/package=epiworldR) | yes              | yes            | yes           | yes            | yes                 | [![status](https://tinyverse.netlify.com/badge/epiworldR.png)](https://CRAN.R-project.org/package=epiworldR) | [![Activity](https://img.shields.io/github/last-commit/UofUEpiBio/epiworldR.png)](https://github.com/UofUEpiBio/epiworldR) |
-| [**ABM**](https://cran.r-project.org/package=ABM)             | \-               | \-             | \-            | yes            | yes                 | [![status](https://tinyverse.netlify.com/badge/ABM.png)](https://CRAN.R-project.org/package=ABM)             | [![Activity](https://img.shields.io/github/last-commit/junlingm/ABM.png)](https://github.com/junlingm/ABM)                 |
-| [**abmR**](https://cran.r-project.org/package=abmR)           | \-               | \-             | yes           | \-             | \-                  | [![status](https://tinyverse.netlify.com/badge/abmR.png)](https://CRAN.R-project.org/package=abmR)           | [![Activity](https://img.shields.io/github/last-commit/bgoch5/abmR.png)](https://github.com/bgoch5/abmR)                   |
-| [**cystiSim**](https://cran.r-project.org/package=cystiSim)   | \-               | yes            | yes           | \-             | \-                  | [![status](https://tinyverse.netlify.com/badge/cystiSim.png)](https://CRAN.R-project.org/package=cystiSim)   | [![Activity](https://img.shields.io/github/last-commit/brechtdv/cystiSim.png)](https://github.com/brechtdv/cystiSim)       |
-| [**villager**](https://cran.r-project.org/package=villager)   | \-               | \-             | \-            | yes            | \-                  | [![status](https://tinyverse.netlify.com/badge/villager.png)](https://CRAN.R-project.org/package=villager)   | [![Activity](https://img.shields.io/github/last-commit/zizroc/villager.png)](https://github.com/zizroc/villager)           |
-| [**RNetLogo**](https://cran.r-project.org/package=RNetLogo)   | \-               | yes            | yes           | yes            | \-                  | [![status](https://tinyverse.netlify.com/badge/RNetLogo.png)](https://CRAN.R-project.org/package=RNetLogo)   | [![Activity](https://img.shields.io/github/last-commit/cran/RNetLogo.png)](https://github.com/cran/RNetLogo)               |
+| Package                                                                     | Multiple Viruses | Multiple Tools | Multiple Runs | Global Actions | Built-In Epi Models |  Dependencies                                                                                             | Activity                                                                                                               |
+|:--------|:--------|:--------|:--------|:--------|---------|:--------|:--------|
+| [**epiworldR**](https://cran.r-project.org/package=epiworldR)               | yes              | yes            | yes           | yes            | yes                 | [![status](https://tinyverse.netlify.app/badge//epiworldR)](https://CRAN.R-project.org/package=epiworldR) | [![Activity](https://img.shields.io/github/last-commit/UofUEpiBio/epiworldR)](https://github.com/UofUEpiBio/epiworldR) |
+| [**ABM**](https://cran.r-project.org/package=ABM)                           | \-               | \-             | \-            | yes            | yes                 | [![status](https://tinyverse.netlify.app/badge//ABM)](https://CRAN.R-project.org/package=ABM)             | [![Activity](https://img.shields.io/github/last-commit/junlingm/ABM)](https://github.com/junlingm/ABM)                 |
+| [**abmR**](https://cran.r-project.org/package=abmR)                         | \-               | \-             | yes           | \-             | \-                  | [![status](https://tinyverse.netlify.app/badge//abmR)](https://CRAN.R-project.org/package=abmR)           | [![Activity](https://img.shields.io/github/last-commit/bgoch5/abmR)](https://github.com/bgoch5/abmR)                   |
+| [**cystiSim**](https://cran.r-project.org/package=cystiSim)                 | \-               | yes            | yes           | \-             | \-                  | [![status](https://tinyverse.netlify.app/badge//cystiSim)](https://CRAN.R-project.org/package=cystiSim)   | [![Activity](https://img.shields.io/github/last-commit/brechtdv/cystiSim)](https://github.com/brechtdv/cystiSim)       |
+| [**villager**](https://cran.r-project.org/package=villager)                 | \-               | \-             | \-            | yes            | \-                  | [![status](https://tinyverse.netlify.app/badge//villager)](https://CRAN.R-project.org/package=villager)   | [![Activity](https://img.shields.io/github/last-commit/zizroc/villager)](https://github.com/zizroc/villager)           |
+| [**RNetLogo**](https://cran.r-project.org/package=RNetLogo) | \-               | yes            | yes           | yes            | \-                  | [![status](https://tinyverse.netlify.app/badge//RNetLogo)](https://CRAN.R-project.org/package=RNetLogo)   | [![Activity](https://img.shields.io/github/last-commit/cran/RNetLogo)](https://github.com/cran/RNetLogo)               |
 
 # Other ABM R packages
 

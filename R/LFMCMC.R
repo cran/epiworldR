@@ -86,6 +86,7 @@
 #' get_mean_params(lfmcmc_model)
 #'
 #' @export
+#' @concept fmcmc
 LFMCMC <- function(model = NULL) {
 
   if ((length(model) > 0) && !inherits(model, "epiworld_model"))
@@ -110,9 +111,9 @@ LFMCMC <- function(model = NULL) {
 #' @returns The simulated model of class [epiworld_lfmcmc].
 #' @export
 run_lfmcmc <- function(
-    lfmcmc, params_init, n_samples, epsilon,
-    seed = NULL
-    ) {
+  lfmcmc, params_init, n_samples, epsilon,
+  seed = NULL
+) {
 
   stopifnot_lfmcmc(lfmcmc)
 

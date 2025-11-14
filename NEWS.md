@@ -1,4 +1,46 @@
-# epiworldR 0.8.3.0
+# epiworldR 0.10.0.0
+
+## New Features
+
+* New model `ModelMeaslesMixingRiskQuarantine` that implements a measles model with mixing, risk-based contacts, and quarantine has been added. This is part of a joint effort with our partners at the Utah Department of Health and Human Services (DHHS).
+
+* Added `print` and `plot` methods for `epiworld_diagram` objects. This allows easy visualization of model diagrams generated with `DiagrammeR`.
+
+## Improvements
+
+* The function `run_multiple_get_results()` has two new arguments: `freader` and `...`, which allows the user to specify a custom function to read the results of each simulation (e.g., `data.table::fread`).
+
+## Bug Fixes
+
+* The rewiring algorithm was not changing the edges, but only the weights of the edges. This has been fixed in epiworld 0.9.4.
+
+* The saver associated with `tools_hist` had a bug that caused it to not save the history of tools correctly. This has been fixed in epiworld 0.10.0. This was detected during work with @margowheatley and @AliseMendoza.
+
+## Misc
+
+* The `ModelMeaslesQuarantine` model has been updated to warn the user if the deprecated parameter `vax_improved_recovery` is used. This parameter is no longer used and has been removed.
+
+* Various legacy C++ files have been removed from the `inst/include/epiworld` folder.
+
+* We now include model diagrams in the documentation of each model (new feature of `epiworld` 0.10.0).
+
+* Various improvements to the documentation of the package and models.
+
+
+# epiworldR 0.9.1.0
+
+## Improvements
+
+* The C++ library has been updated to version 0.9.1, which includes several speed improvements. Some preliminary tests show x10 speedups.
+
+* New model `ModelSEIRMixingQuarantine` that implements a SEIR model with quarantine and mixing has been added.
+
+## Other changes
+
+* The Model `ModelMeaslesQuarantine` has been deprecated in favor of `ModelMeaslesSchool` (change of name).
+
+
+# epiworldR 0.8.3.0 (CRAN)
 
 ## Improvements
 

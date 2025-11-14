@@ -10,6 +10,7 @@
 #' @param seed Seed to set for initializing random number generator (passed to [set.seed()]).
 #' @param model Model object.
 #' @export
+#' @concept model-utility-functions
 #' @name epiworld-methods
 #' @aliases epiworld_model
 #' @examples
@@ -172,6 +173,9 @@ run <- function(model, ndays, seed = NULL) UseMethod("run")
 run.epiworld_model <- function(model, ndays, seed = NULL) {
   if (length(seed)) set.seed(seed)
   run_cpp(model, ndays, sample.int(1e4, 1))
+
+  # For now, just adding a new line (which is currently skipped
+  # in C++)
   invisible(model)
 }
 
@@ -422,15 +426,15 @@ clone_model <- function(model) {
 #' @inheritParams epiworld-model-diagram
 #' @details `draw_mermaid` generates a mermaid diagram of the model. The
 #' diagram is saved in the specified output file (or printed to the standard
-#' output if the filename is empty).
+#' output if the filename is empty). See [draw_mermaid_from_data()].
 #' @return
 #' - The `draw_mermaid` returns the mermaid diagram as a string.
 #' @importFrom utils capture.output
 draw_mermaid <- function(
-    model,
-    output_file = "",
-    allow_self_transitions = FALSE
-    ) {
+  model,
+  output_file = "",
+  allow_self_transitions = FALSE
+) {
   stopifnot_model(model)
   stopifnot_string(output_file)
   stopifnot_bool(allow_self_transitions)
@@ -453,6 +457,10 @@ draw_mermaid <- function(
       allow_self_transitions
     ))
 
-    return(paste(diagram, collapse = "\n"))
+    return(
+      as_epiworld_diagram(
+        paste(diagram, collapse = "\n")
+      )
+    )
   }
 }

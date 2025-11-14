@@ -5,6 +5,7 @@
 #' number of adopters in the network.
 #'
 #' @export
+#' @concept general-models
 #' @param name Name of the model.
 #' @param prevalence Prevalence of the disease.
 #' @param prob_adopt Probability of adoption.
@@ -56,14 +57,14 @@
 #' plot(adopt_chatgpt)
 #' @aliases epiworld_diffnet
 ModelDiffNet <- function(
-    name,
-    prevalence,
-    prob_adopt,
-    normalize_exposure = TRUE,
-    data               = matrix(nrow = 0, ncol = 0),
-    data_cols          = 1L:ncol(data),
-    params             = vector("double")
-    ) {
+  name,
+  prevalence,
+  prob_adopt,
+  normalize_exposure = TRUE,
+  data               = matrix(nrow = 0, ncol = 0),
+  data_cols          = 1L:ncol(data),
+  params             = vector("double")
+) {
   # Check input params
   stopifnot_string(name)
   stopifnot_double(prevalence)

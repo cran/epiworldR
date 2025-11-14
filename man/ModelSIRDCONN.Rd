@@ -45,6 +45,11 @@ model. The user must provide a vector of proportions indicating the following
 values: (1) proportion of non-infected agents already removed, and (2) proportion of
 non-ifected agents already deceased.
 }
+\section{Model diagram}{
+
+\figure{sirdconnected.png}{SIRD Connected Diagram}
+}
+
 \examples{
 model_sirdconn <- ModelSIRDCONN(
   name                = "COVID-19",
@@ -67,12 +72,15 @@ epiworld-methods
 
 Other Models: 
 \code{\link{ModelDiffNet}()},
-\code{\link{ModelMeaslesQuarantine}()},
+\code{\link{ModelMeaslesMixing}()},
+\code{\link{ModelMeaslesMixingRiskQuarantine}()},
+\code{\link{ModelMeaslesSchool}()},
 \code{\link{ModelSEIR}()},
 \code{\link{ModelSEIRCONN}()},
 \code{\link{ModelSEIRD}()},
 \code{\link{ModelSEIRDCONN}()},
 \code{\link{ModelSEIRMixing}()},
+\code{\link{ModelSEIRMixingQuarantine}()},
 \code{\link{ModelSIR}()},
 \code{\link{ModelSIRCONN}()},
 \code{\link{ModelSIRD}()},
@@ -84,3 +92,4 @@ Other Models:
 \code{\link{epiworld-data}}
 }
 \concept{Models}
+\concept{general-models}

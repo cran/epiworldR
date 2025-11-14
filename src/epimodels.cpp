@@ -493,7 +493,7 @@ SEXP ModelSEIRMixing_cpp(
 }
 
 [[cpp11::register]]
-SEXP ModelMeaslesQuarantine_cpp(
+SEXP ModelMeaslesSchool_cpp(
   unsigned int n,
   unsigned int prevalence,
   double contact_rate,
@@ -512,9 +512,9 @@ SEXP ModelMeaslesQuarantine_cpp(
   int isolation_period
 ) {
 
-  // Creating a pointer to a ModelMeaslesQuarantine model
-  cpp11::external_pointer<epiworld::epimodels::ModelMeaslesQuarantine<>> ptr(
-      new epiworld::epimodels::ModelMeaslesQuarantine<>(
+  // Creating a pointer to a ModelMeaslesSchool model
+  cpp11::external_pointer<epiworld::epimodels::ModelMeaslesSchool<>> ptr(
+      new epiworld::epimodels::ModelMeaslesSchool<>(
           n,
           prevalence,
           contact_rate,
@@ -531,6 +531,169 @@ SEXP ModelMeaslesQuarantine_cpp(
           quarantine_period,
           quarantine_willingness,
           isolation_period
+      )
+  );
+
+  return ptr;
+
+}
+
+[[cpp11::register]]
+SEXP ModelSEIRMixingQuarantine_cpp(
+    std::string name,
+    unsigned int n,
+    double prevalence,
+    double contact_rate,
+    double transmission_rate,
+    double incubation_days,
+    double recovery_rate,
+    std::vector< double > contact_matrix,
+    double hospitalization_rate,
+    double hospitalization_period,
+    double days_undetected,
+    int quarantine_period,
+    double quarantine_willingness,
+    double isolation_willingness,
+    int isolation_period,
+    double contact_tracing_success_rate,
+    unsigned int contact_tracing_days_prior
+) {
+
+
+  // Creating a pointer to a ModelSEIRMixingQuarantine model
+  cpp11::external_pointer<epiworld::epimodels::ModelSEIRMixingQuarantine<>> ptr(
+      new epiworld::epimodels::ModelSEIRMixingQuarantine<>(
+          name,
+          n,
+          prevalence,
+          contact_rate,
+          transmission_rate,
+          incubation_days,
+          recovery_rate,
+          contact_matrix,
+          hospitalization_rate,
+          hospitalization_period,
+          days_undetected,
+          quarantine_period,
+          quarantine_willingness,
+          isolation_willingness,
+          isolation_period,
+          contact_tracing_success_rate,
+          contact_tracing_days_prior
+      )
+  );
+
+  return ptr;
+
+}
+
+[[cpp11::register]]
+SEXP ModelMeaslesMixing_cpp(
+    unsigned int n,
+    double prevalence,
+    double contact_rate,
+    double transmission_rate,
+    double vax_efficacy,
+    double vax_reduction_recovery_rate,
+    double incubation_period,
+    double prodromal_period,
+    double rash_period,
+    std::vector< double > contact_matrix,
+    double hospitalization_rate,
+    double hospitalization_period,
+    // Policy parameters
+    double days_undetected,
+    int quarantine_period,
+    double quarantine_willingness,
+    double isolation_willingness,
+    int isolation_period,
+    double prop_vaccinated,
+    double contact_tracing_success_rate = 1.0,
+    unsigned int contact_tracing_days_prior = 4u
+) {
+
+  // Creating a pointer to a ModelMeaslesMixing model
+  cpp11::external_pointer<epiworld::epimodels::ModelMeaslesMixing<>> ptr(
+      new epiworld::epimodels::ModelMeaslesMixing<>(
+          n,
+          prevalence,
+          contact_rate,
+          transmission_rate,
+          vax_efficacy,
+          vax_reduction_recovery_rate,
+          incubation_period,
+          prodromal_period,
+          rash_period,
+          contact_matrix,
+          hospitalization_rate,
+          hospitalization_period,
+          days_undetected,
+          quarantine_period,
+          quarantine_willingness,
+          isolation_willingness,
+          isolation_period,
+          prop_vaccinated,
+          contact_tracing_success_rate,
+          contact_tracing_days_prior
+      )
+  );
+
+  return ptr;
+
+}
+
+[[cpp11::register]]
+SEXP ModelMeaslesMixingRiskQuarantine_cpp(
+    unsigned int n,
+    double prevalence,
+    double contact_rate,
+    double transmission_rate,
+    double vax_efficacy,
+    double incubation_period,
+    double prodromal_period,
+    double rash_period,
+    std::vector< double > contact_matrix,
+    double hospitalization_rate,
+    double hospitalization_period,
+    // Policy parameters
+    double days_undetected,
+    int quarantine_period_high,
+    int quarantine_period_medium,
+    int quarantine_period_low,
+    double quarantine_willingness,
+    double isolation_willingness,
+    int isolation_period,
+    double prop_vaccinated,
+    double detection_rate_quarantine,
+    double contact_tracing_success_rate = 1.0,
+    unsigned int contact_tracing_days_prior = 4u
+) {
+
+  // Creating a pointer to a ModelMeaslesMixingRiskQuarantine model
+  cpp11::external_pointer<epiworld::epimodels::ModelMeaslesMixingRiskQuarantine<>> ptr(
+      new epiworld::epimodels::ModelMeaslesMixingRiskQuarantine<>(
+          n,
+          prevalence,
+          contact_rate,
+          transmission_rate,
+          vax_efficacy,
+          incubation_period,
+          prodromal_period,
+          rash_period,
+          contact_matrix,
+          hospitalization_rate,
+          hospitalization_period,
+          days_undetected,
+          quarantine_period_high,
+          quarantine_period_medium,
+          quarantine_period_low,
+          quarantine_willingness,
+          isolation_willingness,
+          isolation_period,
+          prop_vaccinated,
+          detection_rate_quarantine,
+          contact_tracing_success_rate,
+          contact_tracing_days_prior
       )
   );
 

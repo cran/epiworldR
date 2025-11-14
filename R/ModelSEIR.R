@@ -9,12 +9,15 @@
 #' @param recovery_rate Numeric scalar between 0 and 1. Rate of recovery_rate from virus.
 #' @export
 #' @family Models
+#' @concept general-models
 #' @aliases epiworld_seir
 #' @details
 #' The [initial_states] function allows the user to set the initial state of the
 #' model. The user must provide a vector of proportions indicating the following
 #' values: (1) Proportion of non-infected agents who are removed, and (2)
 #' Proportion of exposed agents to be set as infected.
+#' @section Model diagram:
+#' ![](seir.png "SEIR Diagram")
 #' @returns
 #' - The `ModelSEIR`function returns a model of class [epiworld_model].
 #' @examples
@@ -37,12 +40,12 @@
 #' plot(model_seir, main = "SEIR Model")
 #' @seealso epiworld-methods
 ModelSEIR <- function(
-    name,
-    prevalence,
-    transmission_rate,
-    incubation_days,
-    recovery_rate
-    ) {
+  name,
+  prevalence,
+  transmission_rate,
+  incubation_days,
+  recovery_rate
+) {
   # Check input parameters
   stopifnot_string(name)
   stopifnot_double(prevalence)

@@ -14,6 +14,7 @@
 #' @param d,directed Logical scalar. Whether the graph is directed or not.
 #' @param p Probability of rewiring.
 #' @export
+#' @concept model-utility-functions
 #' @return
 #' - The 'agents_smallworld' function returns a model with the agents
 #' loaded.
@@ -73,13 +74,13 @@ agents_smallworld.epiworld_model <- function(model, n, k, d, p) {
 #' `epiworld_model`.
 #' @rdname agents_smallworld
 agents_from_edgelist <- function(
-    model, source, target, size, directed
-    ) UseMethod("agents_from_edgelist")
+  model, source, target, size, directed
+) UseMethod("agents_from_edgelist")
 
 #' @export
 agents_from_edgelist.epiworld_model <- function(
-    model, source, target, size, directed
-    ) {
+  model, source, target, size, directed
+) {
 
   agents_from_edgelist_cpp(
     model,
@@ -127,8 +128,8 @@ get_agents_states <- function(model) {
 #' - The function `add_virus_agent` adds a virus to an agent and
 #' returns the agent invisibly.
 add_virus_agent <- function(
-    agent, model, virus, state_new = -99, queue = -99
-    ) {
+  agent, model, virus, state_new = -99, queue = -99
+) {
 
   stopifnot_model(model)
   stopifnot_virus(virus)
@@ -147,8 +148,8 @@ add_virus_agent <- function(
 #' - The function `add_tool_agent` adds a tool to an agent and
 #' returns the agent invisibly.
 add_tool_agent <- function(
-    agent, model, tool, state_new = -99, queue = -99
-    ) {
+  agent, model, tool, state_new = -99, queue = -99
+) {
 
   stopifnot_model(model)
   stopifnot_tool(tool)

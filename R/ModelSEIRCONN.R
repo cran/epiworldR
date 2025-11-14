@@ -15,7 +15,10 @@
 #' @param n Number of individuals in the population.
 #' @export
 #' @family Models
+#' @concept general-models
 #' @aliases epiworld_seirconn
+#' @section Model diagram:
+#' ![](seirconnected.png "SEIR Connected Diagram")
 #' @returns
 #' - The `ModelSEIRCONN`function returns a model of class [epiworld_model].
 #' @examples
@@ -47,14 +50,14 @@
 #' plot(model_seirconn)
 #' @seealso epiworld-methods
 ModelSEIRCONN <- function(
-    name,
-    n,
-    prevalence,
-    contact_rate,
-    transmission_rate,
-    incubation_days,
-    recovery_rate
-    ) {
+  name,
+  n,
+  prevalence,
+  contact_rate,
+  transmission_rate,
+  incubation_days,
+  recovery_rate
+) {
   # Check input parameters
   stopifnot_string(name)
   stopifnot_int(n)

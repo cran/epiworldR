@@ -13,14 +13,14 @@ model_seed <- 122
 model_sir <- ModelSIR(
   name = "COVID-19",
   prevalence = .01,
-  transmission_rate = .1,
+  transmission_rate = .02,
   recovery_rate = 1 / 7
 )
 
 agents_smallworld(
   model_sir,
   n = 2000,
-  k = 5,
+  k = 10,
   d = FALSE,
   p = 0.01
 )
@@ -67,8 +67,8 @@ proposal_fun <- function(old_params, lfmcmc_obj) {
 
 ## ----kernfun------------------------------------------------------------------
 kernel_fun <- function(
-    simulated_stats, observed_stats, epsilon, lfmcmc_obj
-    ) {
+  simulated_stats, observed_stats, epsilon, lfmcmc_obj
+) {
 
   diff <- ((simulated_stats - observed_stats)^2)^epsilon
   dnorm(sqrt(sum(diff)))

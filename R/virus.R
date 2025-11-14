@@ -61,17 +61,18 @@
 #' )
 #' virus_set_state(delta2, 1, 2, 3)
 #' @export
+#' @concept virus-functions
 #' @aliases epiworld_virus
 virus <- function(
-    name,
-    prevalence,
-    as_proportion,
-    prob_infecting,
-    recovery_rate = 0.5,
-    prob_death    = 0.0,
-    post_immunity = -1.0,
-    incubation    = 7.0
-    ) {
+  name,
+  prevalence,
+  as_proportion,
+  prob_infecting,
+  recovery_rate = 0.5,
+  prob_death    = 0.0,
+  post_immunity = -1.0,
+  incubation    = 7.0
+) {
 
   uses_deprecated <- FALSE
   if (missing(prevalence)) {
@@ -545,10 +546,10 @@ set_distribution_virus <- function(virus, distfun) {
 #' it will distribute the virus randomly within that set. Otherwise it uses
 #' all the agents in the model.
 distribute_virus_randomly <- function(
-    prevalence,
-    as_proportion,
-    agents_ids = integer(0)
-    ) {
+  prevalence,
+  as_proportion,
+  agents_ids = integer(0)
+) {
 
   structure(
     distribute_virus_randomly_cpp(

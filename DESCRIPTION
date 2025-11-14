@@ -1,14 +1,14 @@
 Package: epiworldR
 Type: Package
 Title: Fast Agent-Based Epi Models
-Version: 0.8.3.0
+Version: 0.10.0.0
 Depends: R (>= 4.1.0)
 Authors@R: c(
-  person(given="George", family="Vega Yon", role=c("aut"),
+  person(given="George", family="Vega Yon", role=c("aut", "cre"),
   email="g.vegayon@gmail.com", comment = c(ORCID = "0000-0002-3171-0844")),
   person(given="Derek", family="Meyer", role=c("aut"),
   email="derekmeyer37@gmail.com", comment = c(ORCID = "0009-0005-1350-6988")),
-  person(given="Andrew", family="Pulsipher", role=c("aut", "cre"),
+  person(given="Andrew", family="Pulsipher", role=c("aut"),
   email="pulsipher.a@gmail.com", comment = c(ORCID = "0000-0002-0773-3210")),
   person(given="Susan", family="Holmes", role = "rev", comment =
          c(what = "JOSS reviewer", ORCID="0000-0002-2208-8168")),
@@ -23,7 +23,7 @@ URL: https://github.com/UofUEpiBio/epiworldR,
         https://uofuepibio.github.io/epiworldR-workshop/
 BugReports: https://github.com/UofUEpiBio/epiworldR/issues
 License: MIT + file LICENSE
-RoxygenNote: 7.3.2
+RoxygenNote: 7.3.3
 Encoding: UTF-8
 LinkingTo: cpp11
 Suggests: knitr, rmarkdown, tinytest, netplot, igraph, data.table,
@@ -31,11 +31,11 @@ Suggests: knitr, rmarkdown, tinytest, netplot, igraph, data.table,
 Imports: utils, parallel
 VignetteBuilder: knitr
 NeedsCompilation: yes
-Packaged: 2025-06-12 17:11:17 UTC; runner
-Author: George Vega Yon [aut] (ORCID: <https://orcid.org/0000-0002-3171-0844>),
+Packaged: 2025-11-13 05:35:30 UTC; runner
+Author: George Vega Yon [aut, cre] (ORCID:
+    <https://orcid.org/0000-0002-3171-0844>),
   Derek Meyer [aut] (ORCID: <https://orcid.org/0009-0005-1350-6988>),
-  Andrew Pulsipher [aut, cre] (ORCID:
-    <https://orcid.org/0000-0002-0773-3210>),
+  Andrew Pulsipher [aut] (ORCID: <https://orcid.org/0000-0002-0773-3210>),
   Susan Holmes [rev] (what: JOSS reviewer, ORCID:
     <https://orcid.org/0000-0002-2208-8168>),
   Abinash Satapathy [rev] (what: JOSS reviewer, ORCID:
@@ -43,6 +43,6 @@ Author: George Vega Yon [aut] (ORCID: <https://orcid.org/0000-0002-3171-0844>),
   Carinogurjao [rev],
   Centers for Disease Control and Prevention [fnd] (Award number
     1U01CK000585; 75D30121F00003)
-Maintainer: Andrew Pulsipher <pulsipher.a@gmail.com>
+Maintainer: George Vega Yon <g.vegayon@gmail.com>
 Repository: CRAN
-Date/Publication: 2025-06-12 22:20:02 UTC
+Date/Publication: 2025-11-14 07:00:02 UTC

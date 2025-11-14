@@ -63,18 +63,19 @@
 #' run(model_sirconn, ndays = 100, seed = 1912) # Run model to view changes
 #'
 #' @export
+#' @concept tool-functions
 #' @returns
 #' - The `tool` function creates a tool of class [epiworld_tool].
 #' @aliases epiworld_tool
 tool <- function(
-    name,
-    prevalence,
-    as_proportion,
-    susceptibility_reduction,
-    transmission_reduction,
-    recovery_enhancer,
-    death_reduction
-    ) {
+  name,
+  prevalence,
+  as_proportion,
+  susceptibility_reduction,
+  transmission_reduction,
+  recovery_enhancer,
+  death_reduction
+) {
 
   uses_deprecated <- FALSE
   if (missing(prevalence)) {
@@ -529,10 +530,10 @@ set_distribution_tool <- function(tool, distfun) {
 #' it will distribute the tool randomly within that set. Otherwise it uses
 #' all the agents in the model.
 distribute_tool_randomly <- function(
-    prevalence,
-    as_proportion,
-    agents_ids = integer(0)
-    ) {
+  prevalence,
+  as_proportion,
+  agents_ids = integer(0)
+) {
 
   structure(
     distribute_tool_randomly_cpp(
@@ -556,8 +557,8 @@ distribute_tool_randomly <- function(
 #' - The `distribute_tool_to_set` function returns a distribution function of
 #' class `epiworld_tool_distfun`.
 distribute_tool_to_set <- function(
-    agents_ids
-    ) {
+  agents_ids
+) {
 
   structure(
     distribute_tool_to_set_cpp(

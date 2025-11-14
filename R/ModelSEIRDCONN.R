@@ -15,12 +15,16 @@
 #' @param death_rate Numeric scalar between 0 and 1. Probability of death.
 #' @param n Number of individuals in the population.
 #' @export
+#' @concept general-models
 #' @details
 #' The [initial_states] function allows the user to set the initial state of the
 #' model. The user must provide a vector of proportions indicating the following
 #' values: (1) Proportion of exposed agents who are infected, (2)
 #' proportion of non-infected agents already removed, and (3) proportion of
 #' non-ifected agents already deceased.
+#' @section Model diagram:
+#'
+#' ![](seirdconnected.png "SEIRD Connected Diagram")
 #' @family Models
 #' @aliases epiworld_seirdconn
 #' @returns
@@ -59,15 +63,15 @@
 #' plot(model_seirdconn)
 #' @seealso epiworld-methods
 ModelSEIRDCONN <- function(
-    name,
-    n,
-    prevalence,
-    contact_rate,
-    transmission_rate,
-    incubation_days,
-    recovery_rate,
-    death_rate
-    ) {
+  name,
+  n,
+  prevalence,
+  contact_rate,
+  transmission_rate,
+  incubation_days,
+  recovery_rate,
+  death_rate
+) {
   # Check input parameters
   stopifnot_string(name)
   stopifnot_int(n)

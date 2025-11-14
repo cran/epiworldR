@@ -226,7 +226,7 @@ the assignment operator will only copy the pointer.
 
 \code{draw_mermaid} generates a mermaid diagram of the model. The
 diagram is saved in the specified output file (or printed to the standard
-output if the filename is empty).
+output if the filename is empty). See \code{\link[=draw_mermaid_from_data]{draw_mermaid_from_data()}}.
 }
 \examples{
 
@@ -314,3 +314,4 @@ get_tool(model_sirconn, 0) # Returns information about the first tool in the
 # Draw a mermaid diagram of the transitions
 draw_mermaid(model_sirconn)
 }
+\concept{model-utility-functions}

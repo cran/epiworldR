@@ -1,3 +1,37 @@
+as_epiworld_diagram <- function(...) {
+  structure(
+    ...,
+    class = "epiworld_diagram"
+  )
+}
+
+#' @export
+#' @rdname epiworld-model-diagram
+#' @param x An `epiworld_diagram` object.
+print.epiworld_diagram <- function(x, ...) {
+  cat(x, sep = "\n")
+  invisible(x)
+}
+
+#' @export
+#' @rdname epiworld-model-diagram
+#' @param ... Additional arguments passed to [DiagrammeR::mermaid()].
+plot.epiworld_diagram <- function(x, ...) {
+  # Replacing the first line
+
+  if (requireNamespace("DiagrammeR", quietly = TRUE)) {
+    x <- gsub("^flowchart", "graph", x)
+    DiagrammeR::mermaid(x)
+  } else {
+    stop(
+      "The 'DiagrammeR' package is required to plot 'epiworld_diagram' ",
+      "objects. Please install it using install.packages('DiagrammeR')."
+    )
+  }
+
+
+}
+
 #' Model Diagram
 #'
 #' Functions described here are helper functions for drawing
@@ -6,6 +40,7 @@
 #' using other packages.
 #'
 #' @name epiworld-model-diagram
+#' @concept model-utility-functions
 #' @examples
 #' # Create and run a model
 #' model <- ModelSIRCONN(
@@ -21,10 +56,15 @@
 #' run(model, ndays = 50, seed = 1912)
 #'
 #' # Draw mermaid diagrams from model data
-#' draw_mermaid_from_data(
+#' diagram <- draw_mermaid_from_data(
 #'   states = get_states(model),
 #'   transition_probs = c(get_transition_probability(model))
 #' )
+#'
+#' \dontrun{
+#' # If DiagrammeR is installed, we can plot the diagram
+#' plot(diagram)
+#' }
 #' @param states String vector. List of model states.
 #' @param transition_probs Numeric vector. Transition probability matrix
 #' @param output_file String. Optional path to a file. If provided, the diagram will be written to the file.
@@ -35,17 +75,17 @@
 #' @export
 #' @importFrom utils capture.output
 draw_mermaid_from_data <- function(
-    states,
-    transition_probs,
-    output_file = "",
-    allow_self_transitions = FALSE
-    ) {
+  states,
+  transition_probs,
+  output_file = "",
+  allow_self_transitions = FALSE
+) {
   stopifnot_stringvector(states)
   stopifnot_numvector(transition_probs)
   stopifnot_string(output_file)
   stopifnot_bool(allow_self_transitions)
 
-  if (output_file != "") {
+  diagram <- if (output_file != "") {
     draw_from_data_cpp(
       states,
       transition_probs,
@@ -55,8 +95,8 @@ draw_mermaid_from_data <- function(
 
     message("Diagram written to ", output_file)
 
-    diagram <- readChar(output_file, file.info(output_file)$size)
-    return(diagram)
+    readChar(output_file, file.info(output_file)$size)
+
   } else {
     diagram <- capture.output(draw_from_data_cpp(
       states,
@@ -65,8 +105,10 @@ draw_mermaid_from_data <- function(
       allow_self_transitions
     ))
 
-    return(paste(diagram, collapse = "\n"))
+    paste(diagram, collapse = "\n")
   }
+
+  as_epiworld_diagram(diagram)
 }
 
 #' @rdname epiworld-model-diagram
@@ -76,10 +118,10 @@ draw_mermaid_from_data <- function(
 #' mermaid diagram as a string.
 #' @export
 draw_mermaid_from_matrix <- function(
-    transition_matrix,
-    output_file = "",
-    allow_self_transitions = FALSE
-    ) {
+  transition_matrix,
+  output_file = "",
+  allow_self_transitions = FALSE
+) {
 
   stopifany_na(transition_matrix)
 
@@ -118,15 +160,15 @@ draw_mermaid_from_matrix <- function(
 #' @export
 #' @importFrom utils capture.output
 draw_mermaid_from_file <- function(
-    transitions_file,
-    output_file = "",
-    allow_self_transitions = FALSE
-    ) {
+  transitions_file,
+  output_file = "",
+  allow_self_transitions = FALSE
+) {
   stopifnot_string(transitions_file)
   stopifnot_string(output_file)
   stopifnot_bool(allow_self_transitions)
 
-  if (output_file != "") {
+  diagram <- if (output_file != "") {
     draw_from_file_cpp(
       transitions_file,
       output_file,
@@ -135,8 +177,7 @@ draw_mermaid_from_file <- function(
 
     message("Diagram written to ", output_file)
 
-    diagram <- readChar(output_file, file.info(output_file)$size)
-    return(diagram)
+    readChar(output_file, file.info(output_file)$size)
   } else {
     diagram <- capture.output(draw_from_file_cpp(
       transitions_file,
@@ -144,8 +185,10 @@ draw_mermaid_from_file <- function(
       allow_self_transitions
     ))
 
-    return(paste(diagram, collapse = "\n"))
+    paste(diagram, collapse = "\n")
   }
+
+  as_epiworld_diagram(diagram)
 }
 
 #' @rdname epiworld-model-diagram
@@ -156,15 +199,15 @@ draw_mermaid_from_file <- function(
 #' @export
 #' @importFrom utils capture.output
 draw_mermaid_from_files <- function(
-    transitions_files,
-    output_file = "",
-    allow_self_transitions = FALSE
-    ) {
+  transitions_files,
+  output_file = "",
+  allow_self_transitions = FALSE
+) {
   stopifnot_stringvector(transitions_files)
   stopifnot_string(output_file)
   stopifnot_bool(allow_self_transitions)
 
-  if (output_file != "") {
+  diagram <- if (output_file != "") {
     draw_from_files_cpp(
       transitions_files,
       output_file,
@@ -173,8 +216,7 @@ draw_mermaid_from_files <- function(
 
     message("Diagram written to ", output_file)
 
-    diagram <- readChar(output_file, file.info(output_file)$size)
-    return(diagram)
+    readChar(output_file, file.info(output_file)$size)
   } else {
     diagram <- capture.output(draw_from_files_cpp(
       transitions_files,
@@ -182,6 +224,8 @@ draw_mermaid_from_files <- function(
       allow_self_transitions
     ))
 
-    return(paste(diagram, collapse = "\n"))
+    paste(diagram, collapse = "\n")
   }
+
+  as_epiworld_diagram(diagram)
 }

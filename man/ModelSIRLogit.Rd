@@ -43,6 +43,11 @@ ModelSIRLogit(
 \description{
 SIR Logistic model
 }
+\section{Model diagram}{
+
+\figure{sirlogit.png}{SIR Logit Diagram}
+}
+
 \examples{
 set.seed(2223)
 n <- 100000
@@ -94,12 +99,15 @@ get_agents(model_logit)
 \seealso{
 Other Models: 
 \code{\link{ModelDiffNet}()},
-\code{\link{ModelMeaslesQuarantine}()},
+\code{\link{ModelMeaslesMixing}()},
+\code{\link{ModelMeaslesMixingRiskQuarantine}()},
+\code{\link{ModelMeaslesSchool}()},
 \code{\link{ModelSEIR}()},
 \code{\link{ModelSEIRCONN}()},
 \code{\link{ModelSEIRD}()},
 \code{\link{ModelSEIRDCONN}()},
 \code{\link{ModelSEIRMixing}()},
+\code{\link{ModelSEIRMixingQuarantine}()},
 \code{\link{ModelSIR}()},
 \code{\link{ModelSIRCONN}()},
 \code{\link{ModelSIRD}()},
@@ -111,3 +119,4 @@ Other Models:
 \code{\link{epiworld-data}}
 }
 \concept{Models}
+\concept{general-models}

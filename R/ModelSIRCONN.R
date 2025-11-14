@@ -8,10 +8,13 @@
 #' @param n Number of individuals in the population.
 #' @export
 #' @family Models
+#' @concept general-models
 #' @details
 #' The [initial_states] function allows the user to set the initial state of the
 #' model. In particular, the user can specify how many of the non-infected
 #' agents have been removed at the beginning of the simulation.
+#' @section Model diagram:
+#' ![](sirconnected.png "SIR Connected Diagram")
 #' @returns
 #' - The `ModelSIRCONN`function returns a model of class [epiworld_model].
 #' @aliases epiworld_sirconn
@@ -33,8 +36,8 @@
 #' plot(model_sirconn,  main = "SIRCONN Model")
 #' @seealso epiworld-methods
 ModelSIRCONN <- function(
-    name, n, prevalence, contact_rate, transmission_rate, recovery_rate
-    ) {
+  name, n, prevalence, contact_rate, transmission_rate, recovery_rate
+) {
   # Check inputs
   stopifnot_string(name)
   stopifnot_int(n)

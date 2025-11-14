@@ -48,6 +48,11 @@ The \link{initial_states} function allows the user to set the initial state of t
 model. In particular, the user can specify how many of the non-infected
 agents have been removed at the beginning of the simulation.
 }
+\section{Model diagram}{
+
+\figure{sirmixing.png}{SIR Mixing Diagram}
+}
+
 \examples{
 # From the vignette
 
@@ -93,12 +98,15 @@ epiworld-methods
 
 Other Models: 
 \code{\link{ModelDiffNet}()},
-\code{\link{ModelMeaslesQuarantine}()},
+\code{\link{ModelMeaslesMixing}()},
+\code{\link{ModelMeaslesMixingRiskQuarantine}()},
+\code{\link{ModelMeaslesSchool}()},
 \code{\link{ModelSEIR}()},
 \code{\link{ModelSEIRCONN}()},
 \code{\link{ModelSEIRD}()},
 \code{\link{ModelSEIRDCONN}()},
 \code{\link{ModelSEIRMixing}()},
+\code{\link{ModelSEIRMixingQuarantine}()},
 \code{\link{ModelSIR}()},
 \code{\link{ModelSIRCONN}()},
 \code{\link{ModelSIRD}()},
@@ -110,3 +118,4 @@ Other Models:
 \code{\link{epiworld-data}}
 }
 \concept{Models}
+\concept{general-models}

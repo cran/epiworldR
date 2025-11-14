@@ -8,8 +8,10 @@
 #' @param prob_infection Numeric scalar. Baseline probability of infection.
 #' @param recovery_rate  Numeric scalar. Baseline probability of recovery.
 #' @param prevalence Numeric scalar. Prevalence (initial state) in proportion.
-#'
+#' @section Model diagram:
+#' ![](sirlogit.png "SIR Logit Diagram")
 #' @export
+#' @concept general-models
 #' @returns
 #' - The `ModelSIRLogit` function returns a model of class [epiworld_model].
 #' @examples
@@ -62,16 +64,16 @@
 
 #' @family Models
 ModelSIRLogit <- function(
-    vname,
-    data,
-    coefs_infect,
-    coefs_recover,
-    coef_infect_cols,
-    coef_recover_cols,
-    prob_infection,
-    recovery_rate,
-    prevalence
-    ) {
+  vname,
+  data,
+  coefs_infect,
+  coefs_recover,
+  coef_infect_cols,
+  coef_recover_cols,
+  prob_infection,
+  recovery_rate,
+  prevalence
+) {
   # Check input parameters
   stopifnot_string(vname)
   stopifany_na(data)

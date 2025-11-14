@@ -11,11 +11,14 @@
 #' @param recovery_rate Numeric scalar between 0 and 1. Rate of recovery_rate from virus.
 #' @param death_rate Numeric scalar between 0 and 1. Rate of death from virus.
 #' @export
+#' @concept general-models
 #' @details
 #' The [initial_states] function allows the user to set the initial state of the
 #' model. The user must provide a vector of proportions indicating the following
 #' values: (1) proportion of non-infected agents already removed, and (2) proportion of
 #' non-ifected agents already deceased.
+#' @section Model diagram:
+#' ![](sird.png "SIRD Diagram")
 #' @family Models
 #' @aliases epiworld_sird
 #' @returns
@@ -46,8 +49,8 @@
 #' plot(model_sird)
 #' @seealso epiworld-methods
 ModelSIRD <- function(
-    name, prevalence, transmission_rate, recovery_rate, death_rate
-    ) {
+  name, prevalence, transmission_rate, recovery_rate, death_rate
+) {
   # Check inputs
   stopifnot_string(name)
   stopifnot_double(prevalence)
