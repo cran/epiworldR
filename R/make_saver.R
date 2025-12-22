@@ -15,16 +15,20 @@
 #'
 #' @details
 #' Currently, the following elements can be saved:
-#'
-#' - `total_hist` History of the model (total numbers per time).
-#' - `virus_info` Information about `viruses`.
-#' - `virus_hist` Changes in `viruses`.
-#' - `tool_info` Information about `tools`.
-#' - `tool_hist` Changes in `tools`.
-#' - `transmission` Transmission events.
-#' - `transition` Transition matrices.
-#' - `reproductive` Reproductive number.
-#' - `generation` Estimation of generation time.
+#' | Keyword | Description | Function |
+#' |:--|:---|:---|
+#' | `total_hist` | History of the model (total numbers per time). | [get_hist_total()] |
+#' | `virus_info` | Information about `viruses`. | |
+#' | `virus_hist` | Changes in `viruses`. | [get_hist_virus()]|
+#' | `tool_info` | Information about `tools`. | |
+#' | `tool_hist` | Changes in `tools`. | [get_hist_tool()]|
+#' | `transmission` | Transmission events. | [get_transmissions()]|
+#' | `transition` | Transition matrices. | [get_hist_transition_matrix()] |
+#' | `reproductive` | Reproductive number. | [get_reproductive_number()]|
+#' | `generation` | Estimation of generation time. | [get_generation_time()] |
+#' | `active_cases` | Number of active cases per virus. | [get_active_cases()] |
+#' | `outbreak_size` | Size of outbreaks per virus. | [get_outbreak_size()] |
+#' | `hospitalizations` | Number of hospitalizations per virus/tool. | [get_hospitalizations()]|
 #'
 #' @section Data structures:
 #'
@@ -50,6 +54,12 @@
 #' (integer), `source_exposure_date` (integer), `rt` (integer).
 #' - `generation`: `virus` (integer), `source` (integer), `source_exposure_date`
 #' (integer), `generation_time` (integer).
+#' - `active_cases`: `date` (integer), `virus_id` (integer), `virus`
+#' (character), `active_cases` (integer).
+#' - `outbreak_size`: `date` (integer), `virus_id` (integer), `virus`
+#' (character), `outbreak_size` (integer).
+#' - `hospitalizations`: `date` (integer), `virus_id` (integer), `tool_id`
+#' (integer), `counts` (integer), and `weight` (numeric).
 #'
 #' An **important difference** from the function [get_reproductive_number()] is
 #' that the returned reproductive number here includes a `-1` in the column
@@ -351,6 +361,7 @@ plot.epiworld_multiple_save_reproductive_number <- function(x, y = NULL, ...) {
 #' @export
 #' @rdname run_multiple
 #' @aliases epiworld_saver
+#' @importFrom methods formalArgs
 make_saver <- function(
   ...,
   fn = ""
@@ -359,23 +370,17 @@ make_saver <- function(
   what <- list(...)
 
   # Any missmatch?
-  available <- c(
-    "total_hist",
-    "virus_info",
-    "virus_hist",
-    "tool_info",
-    "tool_hist",
-    "transmission",
-    "transition",
-    "reproductive",
-    "generation"
-  )
+  available <- methods::formalArgs(make_saver_cpp)[-1]
 
   not_in_available <- which(!(what %in% available))
   if (length(not_in_available)) {
     stop(
       "The following elements in -what- are not supported: \"",
       paste(what[not_in_available], collapse = "\" , \""),
+      "\"\n",
+      # Listing available
+      "Available elements are:\n - \"",
+      paste(available, collapse = "\"\n - \""),
       "\""
     )
   }

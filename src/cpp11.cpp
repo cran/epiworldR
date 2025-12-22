@@ -5,55 +5,6 @@
 #include "cpp11/declarations.hpp"
 #include <R_ext/Visibility.h>
 
-// actions.cpp
-SEXP globalevent_tool_logit_cpp(SEXP tool, std::vector< int > vars, std::vector< double > coefs, std::string name, int day);
-extern "C" SEXP _epiworldR_globalevent_tool_logit_cpp(SEXP tool, SEXP vars, SEXP coefs, SEXP name, SEXP day) {
-  BEGIN_CPP11
-    return cpp11::as_sexp(globalevent_tool_logit_cpp(cpp11::as_cpp<cpp11::decay_t<SEXP>>(tool), cpp11::as_cpp<cpp11::decay_t<std::vector< int >>>(vars), cpp11::as_cpp<cpp11::decay_t<std::vector< double >>>(coefs), cpp11::as_cpp<cpp11::decay_t<std::string>>(name), cpp11::as_cpp<cpp11::decay_t<int>>(day)));
-  END_CPP11
-}
-// actions.cpp
-SEXP globalevent_tool_cpp(SEXP tool, double prob, std::string name, int day);
-extern "C" SEXP _epiworldR_globalevent_tool_cpp(SEXP tool, SEXP prob, SEXP name, SEXP day) {
-  BEGIN_CPP11
-    return cpp11::as_sexp(globalevent_tool_cpp(cpp11::as_cpp<cpp11::decay_t<SEXP>>(tool), cpp11::as_cpp<cpp11::decay_t<double>>(prob), cpp11::as_cpp<cpp11::decay_t<std::string>>(name), cpp11::as_cpp<cpp11::decay_t<int>>(day)));
-  END_CPP11
-}
-// actions.cpp
-SEXP globalevent_set_param_cpp(std::string param, double value, std::string name, int day);
-extern "C" SEXP _epiworldR_globalevent_set_param_cpp(SEXP param, SEXP value, SEXP name, SEXP day) {
-  BEGIN_CPP11
-    return cpp11::as_sexp(globalevent_set_param_cpp(cpp11::as_cpp<cpp11::decay_t<std::string>>(param), cpp11::as_cpp<cpp11::decay_t<double>>(value), cpp11::as_cpp<cpp11::decay_t<std::string>>(name), cpp11::as_cpp<cpp11::decay_t<int>>(day)));
-  END_CPP11
-}
-// actions.cpp
-SEXP print_global_action_cpp(SEXP action);
-extern "C" SEXP _epiworldR_print_global_action_cpp(SEXP action) {
-  BEGIN_CPP11
-    return cpp11::as_sexp(print_global_action_cpp(cpp11::as_cpp<cpp11::decay_t<SEXP>>(action)));
-  END_CPP11
-}
-// actions.cpp
-SEXP add_globalevent_cpp(SEXP model, SEXP action);
-extern "C" SEXP _epiworldR_add_globalevent_cpp(SEXP model, SEXP action) {
-  BEGIN_CPP11
-    return cpp11::as_sexp(add_globalevent_cpp(cpp11::as_cpp<cpp11::decay_t<SEXP>>(model), cpp11::as_cpp<cpp11::decay_t<SEXP>>(action)));
-  END_CPP11
-}
-// actions.cpp
-SEXP rm_globalevent_cpp(SEXP model, std::string name);
-extern "C" SEXP _epiworldR_rm_globalevent_cpp(SEXP model, SEXP name) {
-  BEGIN_CPP11
-    return cpp11::as_sexp(rm_globalevent_cpp(cpp11::as_cpp<cpp11::decay_t<SEXP>>(model), cpp11::as_cpp<cpp11::decay_t<std::string>>(name)));
-  END_CPP11
-}
-// actions.cpp
-SEXP globalevent_fun_cpp(cpp11::function fun, std::string name, int day);
-extern "C" SEXP _epiworldR_globalevent_fun_cpp(SEXP fun, SEXP name, SEXP day) {
-  BEGIN_CPP11
-    return cpp11::as_sexp(globalevent_fun_cpp(cpp11::as_cpp<cpp11::decay_t<cpp11::function>>(fun), cpp11::as_cpp<cpp11::decay_t<std::string>>(name), cpp11::as_cpp<cpp11::decay_t<int>>(day)));
-  END_CPP11
-}
 // agents.cpp
 SEXP get_agents_cpp(SEXP model);
 extern "C" SEXP _epiworldR_get_agents_cpp(SEXP model) {
@@ -185,6 +136,27 @@ cpp11::writable::doubles get_today_total_cpp(SEXP model);
 extern "C" SEXP _epiworldR_get_today_total_cpp(SEXP model) {
   BEGIN_CPP11
     return cpp11::as_sexp(get_today_total_cpp(cpp11::as_cpp<cpp11::decay_t<SEXP>>(model)));
+  END_CPP11
+}
+// db.cpp
+cpp11::writable::data_frame get_active_cases_cpp(SEXP model);
+extern "C" SEXP _epiworldR_get_active_cases_cpp(SEXP model) {
+  BEGIN_CPP11
+    return cpp11::as_sexp(get_active_cases_cpp(cpp11::as_cpp<cpp11::decay_t<SEXP>>(model)));
+  END_CPP11
+}
+// db.cpp
+cpp11::writable::data_frame get_outbreak_size_cpp(SEXP model);
+extern "C" SEXP _epiworldR_get_outbreak_size_cpp(SEXP model) {
+  BEGIN_CPP11
+    return cpp11::as_sexp(get_outbreak_size_cpp(cpp11::as_cpp<cpp11::decay_t<SEXP>>(model)));
+  END_CPP11
+}
+// db.cpp
+cpp11::writable::data_frame get_hospitalizations_cpp(SEXP model);
+extern "C" SEXP _epiworldR_get_hospitalizations_cpp(SEXP model) {
+  BEGIN_CPP11
+    return cpp11::as_sexp(get_hospitalizations_cpp(cpp11::as_cpp<cpp11::decay_t<SEXP>>(model)));
   END_CPP11
 }
 // entities.cpp
@@ -391,31 +363,59 @@ extern "C" SEXP _epiworldR_ModelSEIRMixing_cpp(SEXP name, SEXP n, SEXP prevalenc
   END_CPP11
 }
 // epimodels.cpp
-SEXP ModelMeaslesSchool_cpp(unsigned int n, unsigned int prevalence, double contact_rate, double transmission_rate, double vax_efficacy, double vax_reduction_recovery_rate, double incubation_period, double prodromal_period, double rash_period, double days_undetected, double hospitalization_rate, double hospitalization_period, double prop_vaccinated, int quarantine_period, double quarantine_willingness, int isolation_period);
-extern "C" SEXP _epiworldR_ModelMeaslesSchool_cpp(SEXP n, SEXP prevalence, SEXP contact_rate, SEXP transmission_rate, SEXP vax_efficacy, SEXP vax_reduction_recovery_rate, SEXP incubation_period, SEXP prodromal_period, SEXP rash_period, SEXP days_undetected, SEXP hospitalization_rate, SEXP hospitalization_period, SEXP prop_vaccinated, SEXP quarantine_period, SEXP quarantine_willingness, SEXP isolation_period) {
-  BEGIN_CPP11
-    return cpp11::as_sexp(ModelMeaslesSchool_cpp(cpp11::as_cpp<cpp11::decay_t<unsigned int>>(n), cpp11::as_cpp<cpp11::decay_t<unsigned int>>(prevalence), cpp11::as_cpp<cpp11::decay_t<double>>(contact_rate), cpp11::as_cpp<cpp11::decay_t<double>>(transmission_rate), cpp11::as_cpp<cpp11::decay_t<double>>(vax_efficacy), cpp11::as_cpp<cpp11::decay_t<double>>(vax_reduction_recovery_rate), cpp11::as_cpp<cpp11::decay_t<double>>(incubation_period), cpp11::as_cpp<cpp11::decay_t<double>>(prodromal_period), cpp11::as_cpp<cpp11::decay_t<double>>(rash_period), cpp11::as_cpp<cpp11::decay_t<double>>(days_undetected), cpp11::as_cpp<cpp11::decay_t<double>>(hospitalization_rate), cpp11::as_cpp<cpp11::decay_t<double>>(hospitalization_period), cpp11::as_cpp<cpp11::decay_t<double>>(prop_vaccinated), cpp11::as_cpp<cpp11::decay_t<int>>(quarantine_period), cpp11::as_cpp<cpp11::decay_t<double>>(quarantine_willingness), cpp11::as_cpp<cpp11::decay_t<int>>(isolation_period)));
-  END_CPP11
-}
-// epimodels.cpp
 SEXP ModelSEIRMixingQuarantine_cpp(std::string name, unsigned int n, double prevalence, double contact_rate, double transmission_rate, double incubation_days, double recovery_rate, std::vector< double > contact_matrix, double hospitalization_rate, double hospitalization_period, double days_undetected, int quarantine_period, double quarantine_willingness, double isolation_willingness, int isolation_period, double contact_tracing_success_rate, unsigned int contact_tracing_days_prior);
 extern "C" SEXP _epiworldR_ModelSEIRMixingQuarantine_cpp(SEXP name, SEXP n, SEXP prevalence, SEXP contact_rate, SEXP transmission_rate, SEXP incubation_days, SEXP recovery_rate, SEXP contact_matrix, SEXP hospitalization_rate, SEXP hospitalization_period, SEXP days_undetected, SEXP quarantine_period, SEXP quarantine_willingness, SEXP isolation_willingness, SEXP isolation_period, SEXP contact_tracing_success_rate, SEXP contact_tracing_days_prior) {
   BEGIN_CPP11
     return cpp11::as_sexp(ModelSEIRMixingQuarantine_cpp(cpp11::as_cpp<cpp11::decay_t<std::string>>(name), cpp11::as_cpp<cpp11::decay_t<unsigned int>>(n), cpp11::as_cpp<cpp11::decay_t<double>>(prevalence), cpp11::as_cpp<cpp11::decay_t<double>>(contact_rate), cpp11::as_cpp<cpp11::decay_t<double>>(transmission_rate), cpp11::as_cpp<cpp11::decay_t<double>>(incubation_days), cpp11::as_cpp<cpp11::decay_t<double>>(recovery_rate), cpp11::as_cpp<cpp11::decay_t<std::vector< double >>>(contact_matrix), cpp11::as_cpp<cpp11::decay_t<double>>(hospitalization_rate), cpp11::as_cpp<cpp11::decay_t<double>>(hospitalization_period), cpp11::as_cpp<cpp11::decay_t<double>>(days_undetected), cpp11::as_cpp<cpp11::decay_t<int>>(quarantine_period), cpp11::as_cpp<cpp11::decay_t<double>>(quarantine_willingness), cpp11::as_cpp<cpp11::decay_t<double>>(isolation_willingness), cpp11::as_cpp<cpp11::decay_t<int>>(isolation_period), cpp11::as_cpp<cpp11::decay_t<double>>(contact_tracing_success_rate), cpp11::as_cpp<cpp11::decay_t<unsigned int>>(contact_tracing_days_prior)));
   END_CPP11
 }
-// epimodels.cpp
-SEXP ModelMeaslesMixing_cpp(unsigned int n, double prevalence, double contact_rate, double transmission_rate, double vax_efficacy, double vax_reduction_recovery_rate, double incubation_period, double prodromal_period, double rash_period, std::vector< double > contact_matrix, double hospitalization_rate, double hospitalization_period, double days_undetected, int quarantine_period, double quarantine_willingness, double isolation_willingness, int isolation_period, double prop_vaccinated, double contact_tracing_success_rate, unsigned int contact_tracing_days_prior);
-extern "C" SEXP _epiworldR_ModelMeaslesMixing_cpp(SEXP n, SEXP prevalence, SEXP contact_rate, SEXP transmission_rate, SEXP vax_efficacy, SEXP vax_reduction_recovery_rate, SEXP incubation_period, SEXP prodromal_period, SEXP rash_period, SEXP contact_matrix, SEXP hospitalization_rate, SEXP hospitalization_period, SEXP days_undetected, SEXP quarantine_period, SEXP quarantine_willingness, SEXP isolation_willingness, SEXP isolation_period, SEXP prop_vaccinated, SEXP contact_tracing_success_rate, SEXP contact_tracing_days_prior) {
+// events.cpp
+SEXP globalevent_tool_logit_cpp(SEXP tool, std::vector< int > vars, std::vector< double > coefs, std::string name, int day);
+extern "C" SEXP _epiworldR_globalevent_tool_logit_cpp(SEXP tool, SEXP vars, SEXP coefs, SEXP name, SEXP day) {
   BEGIN_CPP11
-    return cpp11::as_sexp(ModelMeaslesMixing_cpp(cpp11::as_cpp<cpp11::decay_t<unsigned int>>(n), cpp11::as_cpp<cpp11::decay_t<double>>(prevalence), cpp11::as_cpp<cpp11::decay_t<double>>(contact_rate), cpp11::as_cpp<cpp11::decay_t<double>>(transmission_rate), cpp11::as_cpp<cpp11::decay_t<double>>(vax_efficacy), cpp11::as_cpp<cpp11::decay_t<double>>(vax_reduction_recovery_rate), cpp11::as_cpp<cpp11::decay_t<double>>(incubation_period), cpp11::as_cpp<cpp11::decay_t<double>>(prodromal_period), cpp11::as_cpp<cpp11::decay_t<double>>(rash_period), cpp11::as_cpp<cpp11::decay_t<std::vector< double >>>(contact_matrix), cpp11::as_cpp<cpp11::decay_t<double>>(hospitalization_rate), cpp11::as_cpp<cpp11::decay_t<double>>(hospitalization_period), cpp11::as_cpp<cpp11::decay_t<double>>(days_undetected), cpp11::as_cpp<cpp11::decay_t<int>>(quarantine_period), cpp11::as_cpp<cpp11::decay_t<double>>(quarantine_willingness), cpp11::as_cpp<cpp11::decay_t<double>>(isolation_willingness), cpp11::as_cpp<cpp11::decay_t<int>>(isolation_period), cpp11::as_cpp<cpp11::decay_t<double>>(prop_vaccinated), cpp11::as_cpp<cpp11::decay_t<double>>(contact_tracing_success_rate), cpp11::as_cpp<cpp11::decay_t<unsigned int>>(contact_tracing_days_prior)));
+    return cpp11::as_sexp(globalevent_tool_logit_cpp(cpp11::as_cpp<cpp11::decay_t<SEXP>>(tool), cpp11::as_cpp<cpp11::decay_t<std::vector< int >>>(vars), cpp11::as_cpp<cpp11::decay_t<std::vector< double >>>(coefs), cpp11::as_cpp<cpp11::decay_t<std::string>>(name), cpp11::as_cpp<cpp11::decay_t<int>>(day)));
   END_CPP11
 }
-// epimodels.cpp
-SEXP ModelMeaslesMixingRiskQuarantine_cpp(unsigned int n, double prevalence, double contact_rate, double transmission_rate, double vax_efficacy, double incubation_period, double prodromal_period, double rash_period, std::vector< double > contact_matrix, double hospitalization_rate, double hospitalization_period, double days_undetected, int quarantine_period_high, int quarantine_period_medium, int quarantine_period_low, double quarantine_willingness, double isolation_willingness, int isolation_period, double prop_vaccinated, double detection_rate_quarantine, double contact_tracing_success_rate, unsigned int contact_tracing_days_prior);
-extern "C" SEXP _epiworldR_ModelMeaslesMixingRiskQuarantine_cpp(SEXP n, SEXP prevalence, SEXP contact_rate, SEXP transmission_rate, SEXP vax_efficacy, SEXP incubation_period, SEXP prodromal_period, SEXP rash_period, SEXP contact_matrix, SEXP hospitalization_rate, SEXP hospitalization_period, SEXP days_undetected, SEXP quarantine_period_high, SEXP quarantine_period_medium, SEXP quarantine_period_low, SEXP quarantine_willingness, SEXP isolation_willingness, SEXP isolation_period, SEXP prop_vaccinated, SEXP detection_rate_quarantine, SEXP contact_tracing_success_rate, SEXP contact_tracing_days_prior) {
+// events.cpp
+SEXP globalevent_tool_cpp(SEXP tool, double prob, std::string name, int day);
+extern "C" SEXP _epiworldR_globalevent_tool_cpp(SEXP tool, SEXP prob, SEXP name, SEXP day) {
   BEGIN_CPP11
-    return cpp11::as_sexp(ModelMeaslesMixingRiskQuarantine_cpp(cpp11::as_cpp<cpp11::decay_t<unsigned int>>(n), cpp11::as_cpp<cpp11::decay_t<double>>(prevalence), cpp11::as_cpp<cpp11::decay_t<double>>(contact_rate), cpp11::as_cpp<cpp11::decay_t<double>>(transmission_rate), cpp11::as_cpp<cpp11::decay_t<double>>(vax_efficacy), cpp11::as_cpp<cpp11::decay_t<double>>(incubation_period), cpp11::as_cpp<cpp11::decay_t<double>>(prodromal_period), cpp11::as_cpp<cpp11::decay_t<double>>(rash_period), cpp11::as_cpp<cpp11::decay_t<std::vector< double >>>(contact_matrix), cpp11::as_cpp<cpp11::decay_t<double>>(hospitalization_rate), cpp11::as_cpp<cpp11::decay_t<double>>(hospitalization_period), cpp11::as_cpp<cpp11::decay_t<double>>(days_undetected), cpp11::as_cpp<cpp11::decay_t<int>>(quarantine_period_high), cpp11::as_cpp<cpp11::decay_t<int>>(quarantine_period_medium), cpp11::as_cpp<cpp11::decay_t<int>>(quarantine_period_low), cpp11::as_cpp<cpp11::decay_t<double>>(quarantine_willingness), cpp11::as_cpp<cpp11::decay_t<double>>(isolation_willingness), cpp11::as_cpp<cpp11::decay_t<int>>(isolation_period), cpp11::as_cpp<cpp11::decay_t<double>>(prop_vaccinated), cpp11::as_cpp<cpp11::decay_t<double>>(detection_rate_quarantine), cpp11::as_cpp<cpp11::decay_t<double>>(contact_tracing_success_rate), cpp11::as_cpp<cpp11::decay_t<unsigned int>>(contact_tracing_days_prior)));
+    return cpp11::as_sexp(globalevent_tool_cpp(cpp11::as_cpp<cpp11::decay_t<SEXP>>(tool), cpp11::as_cpp<cpp11::decay_t<double>>(prob), cpp11::as_cpp<cpp11::decay_t<std::string>>(name), cpp11::as_cpp<cpp11::decay_t<int>>(day)));
+  END_CPP11
+}
+// events.cpp
+SEXP globalevent_set_param_cpp(std::string param, double value, std::string name, int day);
+extern "C" SEXP _epiworldR_globalevent_set_param_cpp(SEXP param, SEXP value, SEXP name, SEXP day) {
+  BEGIN_CPP11
+    return cpp11::as_sexp(globalevent_set_param_cpp(cpp11::as_cpp<cpp11::decay_t<std::string>>(param), cpp11::as_cpp<cpp11::decay_t<double>>(value), cpp11::as_cpp<cpp11::decay_t<std::string>>(name), cpp11::as_cpp<cpp11::decay_t<int>>(day)));
+  END_CPP11
+}
+// events.cpp
+SEXP print_globalevent_cpp(SEXP event);
+extern "C" SEXP _epiworldR_print_globalevent_cpp(SEXP event) {
+  BEGIN_CPP11
+    return cpp11::as_sexp(print_globalevent_cpp(cpp11::as_cpp<cpp11::decay_t<SEXP>>(event)));
+  END_CPP11
+}
+// events.cpp
+SEXP add_globalevent_cpp(SEXP model, SEXP event);
+extern "C" SEXP _epiworldR_add_globalevent_cpp(SEXP model, SEXP event) {
+  BEGIN_CPP11
+    return cpp11::as_sexp(add_globalevent_cpp(cpp11::as_cpp<cpp11::decay_t<SEXP>>(model), cpp11::as_cpp<cpp11::decay_t<SEXP>>(event)));
+  END_CPP11
+}
+// events.cpp
+SEXP rm_globalevent_cpp(SEXP model, std::string name);
+extern "C" SEXP _epiworldR_rm_globalevent_cpp(SEXP model, SEXP name) {
+  BEGIN_CPP11
+    return cpp11::as_sexp(rm_globalevent_cpp(cpp11::as_cpp<cpp11::decay_t<SEXP>>(model), cpp11::as_cpp<cpp11::decay_t<std::string>>(name)));
+  END_CPP11
+}
+// events.cpp
+SEXP globalevent_fun_cpp(cpp11::function fun, std::string name, int day);
+extern "C" SEXP _epiworldR_globalevent_fun_cpp(SEXP fun, SEXP name, SEXP day) {
+  BEGIN_CPP11
+    return cpp11::as_sexp(globalevent_fun_cpp(cpp11::as_cpp<cpp11::decay_t<cpp11::function>>(fun), cpp11::as_cpp<cpp11::decay_t<std::string>>(name), cpp11::as_cpp<cpp11::decay_t<int>>(day)));
   END_CPP11
 }
 // lfmcmc.cpp
@@ -702,10 +702,10 @@ extern "C" SEXP _epiworldR_run_cpp(SEXP m, SEXP ndays, SEXP seed) {
   END_CPP11
 }
 // model.cpp
-SEXP make_saver_cpp(std::string fn, bool total_hist, bool virus_info, bool virus_hist, bool tool_info, bool tool_hist, bool transmission, bool transition, bool reproductive, bool generation);
-extern "C" SEXP _epiworldR_make_saver_cpp(SEXP fn, SEXP total_hist, SEXP virus_info, SEXP virus_hist, SEXP tool_info, SEXP tool_hist, SEXP transmission, SEXP transition, SEXP reproductive, SEXP generation) {
+SEXP make_saver_cpp(std::string fn, bool total_hist, bool virus_info, bool virus_hist, bool tool_info, bool tool_hist, bool transmission, bool transition, bool reproductive, bool generation, bool active_cases, bool outbreak_size, bool hospitalizations);
+extern "C" SEXP _epiworldR_make_saver_cpp(SEXP fn, SEXP total_hist, SEXP virus_info, SEXP virus_hist, SEXP tool_info, SEXP tool_hist, SEXP transmission, SEXP transition, SEXP reproductive, SEXP generation, SEXP active_cases, SEXP outbreak_size, SEXP hospitalizations) {
   BEGIN_CPP11
-    return cpp11::as_sexp(make_saver_cpp(cpp11::as_cpp<cpp11::decay_t<std::string>>(fn), cpp11::as_cpp<cpp11::decay_t<bool>>(total_hist), cpp11::as_cpp<cpp11::decay_t<bool>>(virus_info), cpp11::as_cpp<cpp11::decay_t<bool>>(virus_hist), cpp11::as_cpp<cpp11::decay_t<bool>>(tool_info), cpp11::as_cpp<cpp11::decay_t<bool>>(tool_hist), cpp11::as_cpp<cpp11::decay_t<bool>>(transmission), cpp11::as_cpp<cpp11::decay_t<bool>>(transition), cpp11::as_cpp<cpp11::decay_t<bool>>(reproductive), cpp11::as_cpp<cpp11::decay_t<bool>>(generation)));
+    return cpp11::as_sexp(make_saver_cpp(cpp11::as_cpp<cpp11::decay_t<std::string>>(fn), cpp11::as_cpp<cpp11::decay_t<bool>>(total_hist), cpp11::as_cpp<cpp11::decay_t<bool>>(virus_info), cpp11::as_cpp<cpp11::decay_t<bool>>(virus_hist), cpp11::as_cpp<cpp11::decay_t<bool>>(tool_info), cpp11::as_cpp<cpp11::decay_t<bool>>(tool_hist), cpp11::as_cpp<cpp11::decay_t<bool>>(transmission), cpp11::as_cpp<cpp11::decay_t<bool>>(transition), cpp11::as_cpp<cpp11::decay_t<bool>>(reproductive), cpp11::as_cpp<cpp11::decay_t<bool>>(generation), cpp11::as_cpp<cpp11::decay_t<bool>>(active_cases), cpp11::as_cpp<cpp11::decay_t<bool>>(outbreak_size), cpp11::as_cpp<cpp11::decay_t<bool>>(hospitalizations)));
   END_CPP11
 }
 // model.cpp
@@ -1052,6 +1052,13 @@ extern "C" SEXP _epiworldR_distribute_tool_to_set_cpp(SEXP agents_ids) {
     return cpp11::as_sexp(distribute_tool_to_set_cpp(cpp11::as_cpp<cpp11::decay_t<integers>>(agents_ids)));
   END_CPP11
 }
+// tool.cpp
+SEXP distribute_tool_to_entities_cpp(doubles prevalence, bool as_proportion);
+extern "C" SEXP _epiworldR_distribute_tool_to_entities_cpp(SEXP prevalence, SEXP as_proportion) {
+  BEGIN_CPP11
+    return cpp11::as_sexp(distribute_tool_to_entities_cpp(cpp11::as_cpp<cpp11::decay_t<doubles>>(prevalence), cpp11::as_cpp<cpp11::decay_t<bool>>(as_proportion)));
+  END_CPP11
+}
 // virus.cpp
 SEXP virus_cpp(std::string name, double prevalence, bool as_proportion, double prob_infecting, double prob_recovery, double prob_death, double post_immunity, double incubation);
 extern "C" SEXP _epiworldR_virus_cpp(SEXP name, SEXP prevalence, SEXP as_proportion, SEXP prob_infecting, SEXP prob_recovery, SEXP prob_death, SEXP post_immunity, SEXP incubation) {
@@ -1213,14 +1220,18 @@ extern "C" SEXP _epiworldR_distribute_virus_to_set_cpp(SEXP agents_ids) {
     return cpp11::as_sexp(distribute_virus_to_set_cpp(cpp11::as_cpp<cpp11::decay_t<integers>>(agents_ids)));
   END_CPP11
 }
+// virus.cpp
+SEXP distribute_virus_to_entities_cpp(doubles prevalence, bool as_proportion);
+extern "C" SEXP _epiworldR_distribute_virus_to_entities_cpp(SEXP prevalence, SEXP as_proportion) {
+  BEGIN_CPP11
+    return cpp11::as_sexp(distribute_virus_to_entities_cpp(cpp11::as_cpp<cpp11::decay_t<doubles>>(prevalence), cpp11::as_cpp<cpp11::decay_t<bool>>(as_proportion)));
+  END_CPP11
+}
 
 extern "C" {
 static const R_CallMethodDef CallEntries[] = {
     {"_epiworldR_LFMCMC_cpp",                           (DL_FUNC) &_epiworldR_LFMCMC_cpp,                            1},
     {"_epiworldR_ModelDiffNet_cpp",                     (DL_FUNC) &_epiworldR_ModelDiffNet_cpp,                      8},
-    {"_epiworldR_ModelMeaslesMixingRiskQuarantine_cpp", (DL_FUNC) &_epiworldR_ModelMeaslesMixingRiskQuarantine_cpp, 22},
-    {"_epiworldR_ModelMeaslesMixing_cpp",               (DL_FUNC) &_epiworldR_ModelMeaslesMixing_cpp,               20},
-    {"_epiworldR_ModelMeaslesSchool_cpp",               (DL_FUNC) &_epiworldR_ModelMeaslesSchool_cpp,               16},
     {"_epiworldR_ModelSEIRCONN_cpp",                    (DL_FUNC) &_epiworldR_ModelSEIRCONN_cpp,                     7},
     {"_epiworldR_ModelSEIRDCONN_cpp",                   (DL_FUNC) &_epiworldR_ModelSEIRDCONN_cpp,                    8},
     {"_epiworldR_ModelSEIRD_cpp",                       (DL_FUNC) &_epiworldR_ModelSEIRD_cpp,                        6},
@@ -1250,8 +1261,10 @@ static const R_CallMethodDef CallEntries[] = {
     {"_epiworldR_distribute_entity_randomly_cpp",       (DL_FUNC) &_epiworldR_distribute_entity_randomly_cpp,        3},
     {"_epiworldR_distribute_entity_to_set_cpp",         (DL_FUNC) &_epiworldR_distribute_entity_to_set_cpp,          1},
     {"_epiworldR_distribute_tool_randomly_cpp",         (DL_FUNC) &_epiworldR_distribute_tool_randomly_cpp,          3},
+    {"_epiworldR_distribute_tool_to_entities_cpp",      (DL_FUNC) &_epiworldR_distribute_tool_to_entities_cpp,       2},
     {"_epiworldR_distribute_tool_to_set_cpp",           (DL_FUNC) &_epiworldR_distribute_tool_to_set_cpp,            1},
     {"_epiworldR_distribute_virus_randomly_cpp",        (DL_FUNC) &_epiworldR_distribute_virus_randomly_cpp,         3},
+    {"_epiworldR_distribute_virus_to_entities_cpp",     (DL_FUNC) &_epiworldR_distribute_virus_to_entities_cpp,      2},
     {"_epiworldR_distribute_virus_to_set_cpp",          (DL_FUNC) &_epiworldR_distribute_virus_to_set_cpp,           1},
     {"_epiworldR_draw_from_data_cpp",                   (DL_FUNC) &_epiworldR_draw_from_data_cpp,                    4},
     {"_epiworldR_draw_from_file_cpp",                   (DL_FUNC) &_epiworldR_draw_from_file_cpp,                    3},
@@ -1260,6 +1273,7 @@ static const R_CallMethodDef CallEntries[] = {
     {"_epiworldR_entity_add_agent_cpp",                 (DL_FUNC) &_epiworldR_entity_add_agent_cpp,                  3},
     {"_epiworldR_entity_cpp",                           (DL_FUNC) &_epiworldR_entity_cpp,                            4},
     {"_epiworldR_entity_get_agents_cpp",                (DL_FUNC) &_epiworldR_entity_get_agents_cpp,                 1},
+    {"_epiworldR_get_active_cases_cpp",                 (DL_FUNC) &_epiworldR_get_active_cases_cpp,                  1},
     {"_epiworldR_get_agent_cpp",                        (DL_FUNC) &_epiworldR_get_agent_cpp,                         2},
     {"_epiworldR_get_agents_cpp",                       (DL_FUNC) &_epiworldR_get_agents_cpp,                        1},
     {"_epiworldR_get_agents_data_ncols_cpp",            (DL_FUNC) &_epiworldR_get_agents_data_ncols_cpp,             1},
@@ -1286,6 +1300,7 @@ static const R_CallMethodDef CallEntries[] = {
     {"_epiworldR_get_hist_total_cpp",                   (DL_FUNC) &_epiworldR_get_hist_total_cpp,                    1},
     {"_epiworldR_get_hist_transition_matrix_cpp",       (DL_FUNC) &_epiworldR_get_hist_transition_matrix_cpp,        2},
     {"_epiworldR_get_hist_virus_cpp",                   (DL_FUNC) &_epiworldR_get_hist_virus_cpp,                    1},
+    {"_epiworldR_get_hospitalizations_cpp",             (DL_FUNC) &_epiworldR_get_hospitalizations_cpp,              1},
     {"_epiworldR_get_initial_params_cpp",               (DL_FUNC) &_epiworldR_get_initial_params_cpp,                1},
     {"_epiworldR_get_mean_params_cpp",                  (DL_FUNC) &_epiworldR_get_mean_params_cpp,                   1},
     {"_epiworldR_get_mean_stats_cpp",                   (DL_FUNC) &_epiworldR_get_mean_stats_cpp,                    1},
@@ -1301,6 +1316,7 @@ static const R_CallMethodDef CallEntries[] = {
     {"_epiworldR_get_ndays_cpp",                        (DL_FUNC) &_epiworldR_get_ndays_cpp,                         1},
     {"_epiworldR_get_network_cpp",                      (DL_FUNC) &_epiworldR_get_network_cpp,                       1},
     {"_epiworldR_get_observed_stats_cpp",               (DL_FUNC) &_epiworldR_get_observed_stats_cpp,                1},
+    {"_epiworldR_get_outbreak_size_cpp",                (DL_FUNC) &_epiworldR_get_outbreak_size_cpp,                 1},
     {"_epiworldR_get_param_cpp",                        (DL_FUNC) &_epiworldR_get_param_cpp,                         2},
     {"_epiworldR_get_reproductive_number_cpp",          (DL_FUNC) &_epiworldR_get_reproductive_number_cpp,           1},
     {"_epiworldR_get_state_agent_cpp",                  (DL_FUNC) &_epiworldR_get_state_agent_cpp,                   1},
@@ -1318,12 +1334,12 @@ static const R_CallMethodDef CallEntries[] = {
     {"_epiworldR_has_virus_cpp",                        (DL_FUNC) &_epiworldR_has_virus_cpp,                         2},
     {"_epiworldR_initial_states_cpp",                   (DL_FUNC) &_epiworldR_initial_states_cpp,                    2},
     {"_epiworldR_load_agents_entities_ties_cpp",        (DL_FUNC) &_epiworldR_load_agents_entities_ties_cpp,         3},
-    {"_epiworldR_make_saver_cpp",                       (DL_FUNC) &_epiworldR_make_saver_cpp,                       10},
+    {"_epiworldR_make_saver_cpp",                       (DL_FUNC) &_epiworldR_make_saver_cpp,                       13},
     {"_epiworldR_print_agent_cpp",                      (DL_FUNC) &_epiworldR_print_agent_cpp,                       3},
     {"_epiworldR_print_agent_tools_cpp",                (DL_FUNC) &_epiworldR_print_agent_tools_cpp,                 1},
     {"_epiworldR_print_cpp",                            (DL_FUNC) &_epiworldR_print_cpp,                             2},
     {"_epiworldR_print_entity_cpp",                     (DL_FUNC) &_epiworldR_print_entity_cpp,                      1},
-    {"_epiworldR_print_global_action_cpp",              (DL_FUNC) &_epiworldR_print_global_action_cpp,               1},
+    {"_epiworldR_print_globalevent_cpp",                (DL_FUNC) &_epiworldR_print_globalevent_cpp,                 1},
     {"_epiworldR_print_lfmcmc_cpp",                     (DL_FUNC) &_epiworldR_print_lfmcmc_cpp,                      2},
     {"_epiworldR_print_tool_cpp",                       (DL_FUNC) &_epiworldR_print_tool_cpp,                        1},
     {"_epiworldR_print_virus_cpp",                      (DL_FUNC) &_epiworldR_print_virus_cpp,                       1},

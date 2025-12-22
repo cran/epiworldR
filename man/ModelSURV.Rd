@@ -102,9 +102,6 @@ epiworld-methods
 
 Other Models: 
 \code{\link{ModelDiffNet}()},
-\code{\link{ModelMeaslesMixing}()},
-\code{\link{ModelMeaslesMixingRiskQuarantine}()},
-\code{\link{ModelMeaslesSchool}()},
 \code{\link{ModelSEIR}()},
 \code{\link{ModelSEIRCONN}()},
 \code{\link{ModelSEIRD}()},
@@ -118,8 +115,7 @@ Other Models:
 \code{\link{ModelSIRLogit}()},
 \code{\link{ModelSIRMixing}()},
 \code{\link{ModelSIS}()},
-\code{\link{ModelSISD}()},
-\code{\link{epiworld-data}}
+\code{\link{ModelSISD}()}
 }
 \concept{Models}
 \concept{general-models}

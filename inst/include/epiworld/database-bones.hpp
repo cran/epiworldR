@@ -27,8 +27,8 @@ inline void default_change_state(Event<TSeq> & a, Model<TSeq> * m);
 
 /**
  * @brief Statistical data about the process
- * 
- * @tparam TSeq 
+ *
+ * @tparam TSeq
  */
 template<typename TSeq>
 class DataBase {
@@ -41,7 +41,9 @@ class DataBase {
 private:
     Model<TSeq> * model;
 
-    // Variants information 
+    HospitalizationsTracker<TSeq> m_hospitalizations; ///< Tracker for hospitalization events
+
+    // Variants information
     MapVec_type<int,int> virus_id; ///< The squence is the key
     std::vector< std::string > virus_name;
     std::vector< TSeq> virus_sequence;
@@ -67,7 +69,7 @@ private:
 
     // Totals
     int today_total_nviruses_active = 0;
-    
+
     int sampling_freq = 1;
 
     // Variants history
@@ -109,13 +111,15 @@ private:
     void update_virus(
         epiworld_fast_uint virus_id,
         epiworld_fast_uint prev_state,
-        epiworld_fast_uint new_state
+        epiworld_fast_uint new_state,
+        bool undo = false
     );
 
     void update_tool(
         epiworld_fast_uint tool_id,
         epiworld_fast_uint prev_state,
-        epiworld_fast_uint new_state
+        epiworld_fast_uint new_state,
+        bool undo = false
     );
 
     void record_transition(epiworld_fast_uint from, epiworld_fast_uint to, bool undo);
@@ -129,20 +133,20 @@ public:
     #endif
 
     DataBase() = delete;
-    DataBase(Model<TSeq> & m) : model(&m), user_data(m) {};
+    DataBase(Model<TSeq> & m) : model(&m), m_hospitalizations(), user_data(m) {};
     DataBase(const DataBase<TSeq> & db);
     // DataBase<TSeq> & operator=(const DataBase<TSeq> & m);
 
     /**
      * @brief Registering a new variant
-     * 
+     *
      * @param v Pointer to the new virus.
      * Since viruses are originated in the agent, the numbers simply move around.
      * From the parent virus to the new virus. And the total number of infected
      * does not change.
      */
-    void record_virus(Virus<TSeq> & v); 
-    void record_tool(Tool<TSeq> & t); 
+    void record_virus(Virus<TSeq> & v);
+    void record_tool(Tool<TSeq> & t);
     void set_seq_hasher(std::function<std::vector<int>(TSeq)> fun);
     void reset();
     Model<TSeq> * get_model();
@@ -154,7 +158,7 @@ public:
 
     /**
      * @name Get recorded information from the model
-     * 
+     *
      * @param what std::string, The state, e.g., 0, 1, 2, ...
      * @return In `get_today_total`, the current counts of `what`.
      * @return In `get_today_virus`, the current counts of `what` for
@@ -163,6 +167,8 @@ public:
      * @return In `get_hist_virus`, the time series of what for each virus.
      * @return In `get_hist_total_date` and `get_hist_virus_date` the
      * corresponding date
+     * @return In `get_active_cases`, the number of active cases (currently infected individuals)
+     * for each virus at each point in time.
      */
     ///@{
     int get_today_total(const std::string & what) const;
@@ -209,16 +215,28 @@ public:
         std::vector< int > & counts,
         bool skip_zeros
     ) const;
+
+    void get_active_cases(
+        std::vector< int > & date,
+        std::vector< int > & virus_id,
+        std::vector< int > & count
+    ) const;
+
+    void get_outbreak_size(
+        std::vector< int > & date,
+        std::vector< int > & virus_id,
+        std::vector< int > & size
+    ) const;
     ///@}
 
     /**
      * @brief Get the transmissions object
-     * 
-     * @param date 
-     * @param source 
-     * @param target 
-     * @param virus 
-     * @param source_exposure_date 
+     *
+     * @param date
+     * @param source
+     * @param target
+     * @param virus
+     * @param source_exposure_date
      */
     ///@{
     void get_transmissions(
@@ -247,9 +265,12 @@ public:
         std::string fn_transmission,
         std::string fn_transition,
         std::string fn_reproductive_number,
-        std::string fn_generation_time
+        std::string fn_generation_time,
+        std::string fn_active_cases,
+        std::string fn_outbreak_size,
+        std::string fn_hospitalizations
         ) const;
-    
+
     /***
      * @brief Record a transmission event
      * @param i,j Integers. Id of the source and target agents.
@@ -263,7 +284,7 @@ public:
 
     size_t get_n_viruses() const; ///< Get the number of viruses
     size_t get_n_tools() const; ///< Get the number of tools
-    
+
     void set_user_data(std::vector< std::string > names);
     void add_user_data(std::vector< epiworld_double > x);
     void add_user_data(epiworld_fast_uint j, epiworld_double x);
@@ -272,11 +293,11 @@ public:
 
     /**
      * @brief Computes the reproductive number of each case
-     * 
+     *
      * @details By definition, whereas it computes R0 (basic reproductive number)
      * or Rt/R (the effective reproductive number) will depend on whether the
      * virus is allowed to circulate naïvely or not, respectively.
-     * 
+     *
      * @param fn File where to write out the reproductive number.
      * @details
      * In the case of `MapVec_type<int,int>`, the key is a vector of 3 integers:
@@ -295,15 +316,15 @@ public:
     /**
      * @brief Calculates the transition probabilities
      * @param print Print the transition matrix.
-     * @param normalize Normalize the transition matrix. Otherwise, 
+     * @param normalize Normalize the transition matrix. Otherwise,
      * it returns raw counts.
      * @details
      * The transition matrix is the matrix of the counts of transitions
      * from one state to another. So the ij-th element of the matrix is
      * the number of transitions from state i to state j (when not normalized),
-     * or the probability of transitioning from state i to state j 
+     * or the probability of transitioning from state i to state j
      * (when normalized).
-     * @return std::vector< epiworld_double > 
+     * @return std::vector< epiworld_double >
      */
     std::vector< epiworld_double > get_transition_probability(
         bool print = true,
@@ -315,10 +336,10 @@ public:
 
     /**
      * Calculates the generating time
-     * @param agent_id,virus_id,time,gentime vectors where to save the values 
-     * 
+     * @param agent_id,virus_id,time,gentime vectors where to save the values
+     *
      * @details
-     * The generation time is the time between the infection of the source and 
+     * The generation time is the time between the infection of the source and
      * the infection of the target.
     */
    ///@{
@@ -333,6 +354,54 @@ public:
         std::string fn
     ) const; ///< Write the generation time to a file
     ///@}
+
+    /**
+     * @brief Record a hospitalization event for an agent.
+     * 
+     * @param agent Reference to the agent being hospitalized.
+     * 
+     * @details
+     * For each hospitalization, the method records:
+     * - The current date from the model
+     * - The virus ID from the agent's virus
+     * - For each tool the agent has, a separate record with weight = 1/N
+     *   where N is the number of tools
+     * - If the agent has no tools, a single record with tool_id = -1 and
+     *   weight = 1.0
+     */
+    void record_hospitalization(Agent<TSeq> & agent);
+
+    /**
+     * @brief Get the full time series of hospitalization data.
+     * 
+     * @param date Output vector for dates.
+     * @param virus_id Output vector for virus IDs.
+     * @param tool_id Output vector for tool IDs.
+     * @param count Output vector for counts (number of hospitalized individuals).
+     * @param weight Output vector for summed weights (fractional contribution
+     *   based on tool distribution).
+     * 
+     * @details
+     * Returns the full time series of hospitalization data. For each unique 
+     * (virus_id, tool_id) combination observed, returns an entry for every 
+     * day from 0 to ndays-1.
+     * 
+     * The `count` vector contains the actual number of individuals hospitalized 
+     * for that (date, virus_id, tool_id) combination. This is useful for 
+     * answering questions like "how many total people were hospitalized?" 
+     * regardless of their tools.
+     * 
+     * The `weight` vector contains fractional contributions: if an agent has N 
+     * tools, each tool gets weight = 1/N. Summing weights across all tool_ids 
+     * for a given date and virus_id gives the total number of hospitalizations.
+     */
+    void get_hospitalizations(
+        std::vector<int> & date,
+        std::vector<int> & virus_id,
+        std::vector<int> & tool_id,
+        std::vector<int> & count,
+        std::vector<double> & weight
+    ) const;
 
 };
 

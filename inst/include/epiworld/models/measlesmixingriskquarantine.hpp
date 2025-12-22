@@ -55,10 +55,13 @@
  * Disease progression follows the same states as ModelMeaslesMixing:
  * Susceptible → Exposed → Prodromal → Rash → Recovered
  * 
+ * ![Model Diagram](../assets/img/measlesmixingriskquarantine.png)
+ * 
  * @tparam TSeq Type for genetic sequences (default: EPI_DEFAULT_TSEQ)
+ * @ingroup disease_specific
  */
 template<typename TSeq = EPI_DEFAULT_TSEQ>
-class ModelMeaslesMixingRiskQuarantine : public Model<TSeq> 
+class ModelMeaslesMixingRiskQuarantine : public epiworld::Model<TSeq> 
 {
 private:
     // Vector of vectors of infected agents (prodromal agents are infectious)
@@ -652,6 +655,7 @@ inline void ModelMeaslesMixingRiskQuarantine<TSeq>::m_update_rash(
     }
     else if (which == 1) // Hospitalized
     {
+        m->record_hospitalization(*p);
         p->change_state(m, detected ? DETECTED_HOSPITALIZED : HOSPITALIZED);
     }
     else if ((which == 0) && detected)
@@ -698,6 +702,7 @@ inline void ModelMeaslesMixingRiskQuarantine<TSeq>::m_update_isolated(
     // Moves to hospitalized
     else if (which == 1u)
     {
+        m->record_hospitalization(*p);
         p->change_state(m, DETECTED_HOSPITALIZED);
     }
     // Stays in rash, may or may not be released from isolation

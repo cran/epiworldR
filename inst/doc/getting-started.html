@@ -14,7 +14,7 @@
 <meta name="author" content="George Vega Yon" />
 <meta name="author" content="Andrew Pulsipher" />
 
-<meta name="date" content="2025-11-13" />
+<meta name="date" content="2025-12-20" />
 
 <title>Getting started with epiworldR</title>
 
@@ -2906,7 +2906,7 @@ code > span.er { color: #a61717; background-color: #e3d2d2; }
 <h4 class="author">Derek Meyer</h4>
 <h4 class="author">George Vega Yon</h4>
 <h4 class="author">Andrew Pulsipher</h4>
-<h4 class="date">2025-11-13</h4>
+<h4 class="date">2025-12-20</h4>
 
 
 
@@ -3006,8 +3006,8 @@ model_sir.</p>
 <span id="cb3-14"><a href="#cb3-14" tabindex="-1"></a><span class="co">#&gt; Number of entities  : 0</span></span>
 <span id="cb3-15"><a href="#cb3-15" tabindex="-1"></a><span class="co">#&gt; Days (duration)     : 50 (of 50)</span></span>
 <span id="cb3-16"><a href="#cb3-16" tabindex="-1"></a><span class="co">#&gt; Number of viruses   : 1</span></span>
-<span id="cb3-17"><a href="#cb3-17" tabindex="-1"></a><span class="co">#&gt; Last run elapsed t  : 77.00ms</span></span>
-<span id="cb3-18"><a href="#cb3-18" tabindex="-1"></a><span class="co">#&gt; Last run speed      : 32.32 million agents x day / second</span></span>
+<span id="cb3-17"><a href="#cb3-17" tabindex="-1"></a><span class="co">#&gt; Last run elapsed t  : 76.00ms</span></span>
+<span id="cb3-18"><a href="#cb3-18" tabindex="-1"></a><span class="co">#&gt; Last run speed      : 32.75 million agents x day / second</span></span>
 <span id="cb3-19"><a href="#cb3-19" tabindex="-1"></a><span class="co">#&gt; Rewiring            : off</span></span>
 <span id="cb3-20"><a href="#cb3-20" tabindex="-1"></a><span class="co">#&gt; </span></span>
 <span id="cb3-21"><a href="#cb3-21" tabindex="-1"></a><span class="co">#&gt; Global events:</span></span>
@@ -3058,7 +3058,7 @@ probabilities, use the <code>draw_mermaid()</code> function. By default,
 we can print the diagram to the console like this:</p>
 <div class="sourceCode" id="cb4"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb4-1"><a href="#cb4-1" tabindex="-1"></a>diagram <span class="ot">&lt;-</span> <span class="fu">draw_mermaid</span>(model_sir)</span>
 <span id="cb4-2"><a href="#cb4-2" tabindex="-1"></a><span class="fu">print</span>(diagram)</span>
-<span id="cb4-3"><a href="#cb4-3" tabindex="-1"></a><span class="co">#&gt; flowchart LR</span></span>
+<span id="cb4-3"><a href="#cb4-3" tabindex="-1"></a><span class="co">#&gt; flowchart TB</span></span>
 <span id="cb4-4"><a href="#cb4-4" tabindex="-1"></a><span class="co">#&gt;  s0[Infected]</span></span>
 <span id="cb4-5"><a href="#cb4-5" tabindex="-1"></a><span class="co">#&gt;  s1[Recovered]</span></span>
 <span id="cb4-6"><a href="#cb4-6" tabindex="-1"></a><span class="co">#&gt;  s2[Susceptible]</span></span>
@@ -3068,7 +3068,7 @@ we can print the diagram to the console like this:</p>
 the diagram directly in R:</p>
 <div class="sourceCode" id="cb5"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb5-1"><a href="#cb5-1" tabindex="-1"></a><span class="fu">plot</span>(diagram)</span></code></pre></div>
 <div class="DiagrammeR html-widget html-fill-item" id="htmlwidget-f21b1c8fa7fef1ab9456" style="width:80%;height:480px;"></div>
-<script type="application/json" data-for="htmlwidget-f21b1c8fa7fef1ab9456">{"x":{"diagram":"graph LR\n\ts0[Infected]\n\ts1[Recovered]\n\ts2[Susceptible]\n\ts0 -->|0.331164| s1\n\ts2 -->|0.046436| s0\n"},"evals":[],"jsHooks":[]}</script>
+<script type="application/json" data-for="htmlwidget-f21b1c8fa7fef1ab9456">{"x":{"diagram":"graph TB\n\ts0[Infected]\n\ts1[Recovered]\n\ts2[Susceptible]\n\ts0 -->|0.331164| s1\n\ts2 -->|0.046436| s0\n"},"evals":[],"jsHooks":[]}</script>
 </div>
 <div id="extracting-information" class="section level2">
 <h2>Extracting information</h2>
