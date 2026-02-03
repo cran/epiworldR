@@ -1,7 +1,7 @@
 Package: epiworldR
 Type: Package
 Title: Fast Agent-Based Epi Models
-Version: 0.11.0.1
+Version: 0.11.2.0
 Depends: R (>= 4.1.0)
 Authors@R: c(
   person(given="George", family="Vega Yon", role=c("aut", "cre"),
@@ -31,7 +31,7 @@ Suggests: knitr, rmarkdown, tinytest, netplot, igraph, data.table,
 Imports: utils, parallel, methods
 VignetteBuilder: knitr
 NeedsCompilation: yes
-Packaged: 2026-01-13 18:53:36 UTC; runner
+Packaged: 2026-02-03 17:11:14 UTC; runner
 Author: George Vega Yon [aut, cre] (ORCID:
     <https://orcid.org/0000-0002-3171-0844>),
   Derek Meyer [aut] (ORCID: <https://orcid.org/0009-0005-1350-6988>),
@@ -45,4 +45,4 @@ Author: George Vega Yon [aut, cre] (ORCID:
     1U01CK000585; 75D30121F00003)
 Maintainer: George Vega Yon <g.vegayon@gmail.com>
 Repository: CRAN
-Date/Publication: 2026-01-14 06:10:35 UTC
+Date/Publication: 2026-02-03 17:50:02 UTC
