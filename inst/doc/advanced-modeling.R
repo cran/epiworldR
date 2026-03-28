@@ -1,11 +1,5 @@
-## ----setup, include = FALSE---------------------------------------------------
-knitr::opts_chunk$set(
-  collapse = TRUE,
-  comment = "#>", out.width = "80%", fig.width = 7, fig.height = 5,
-  fig.align = "center"
-)
-
-## ----create-base-model--------------------------------------------------------
+## -----------------------------------------------------------------------------
+#| label: create-base-model
 library(epiworldR)
 
 model_sirconn <- ModelSIRCONN(
@@ -17,22 +11,32 @@ model_sirconn <- ModelSIRCONN(
   transmission_rate = 0.5
 )
 
-## ----run-base-model-----------------------------------------------------------
+
+## -----------------------------------------------------------------------------
+#| label: run-base-model
 verbose_off(model_sirconn)
 run(model_sirconn, ndays = 50, seed = 1912)
 plot(model_sirconn)
 
-## ----create-flu-virus---------------------------------------------------------
+
+## -----------------------------------------------------------------------------
+#| label: create-flu-virus
 flu_virus <- virus(name = "Flu", prob_infecting = .35, prevalence = 0.001, as_proportion = TRUE)
 
-## ----add-flu------------------------------------------------------------------
+
+## -----------------------------------------------------------------------------
+#| label: add-flu
 add_virus(model_sirconn, flu_virus)
 
-## ----run-model-flu------------------------------------------------------------
+
+## -----------------------------------------------------------------------------
+#| label: run-model-flu
 run(model_sirconn, ndays = 50, seed = 1912)
 plot(model_sirconn)
 
-## ----create-vaccine-----------------------------------------------------------
+
+## -----------------------------------------------------------------------------
+#| label: create-vaccine
 vaccine_tool <- tool(
   name = "Vaccine",
   susceptibility_reduction = .9,
@@ -43,35 +47,51 @@ vaccine_tool <- tool(
   as_proportion = TRUE
 )
 
-## ----set-vaccine-distribution-------------------------------------------------
+
+## -----------------------------------------------------------------------------
+#| label: set-vaccine-distribution
 set_distribution_tool(
   tool = vaccine_tool,
   distfun = distribute_tool_randomly(0.5, TRUE)
 )
 
-## ----add-vaccine--------------------------------------------------------------
+
+## -----------------------------------------------------------------------------
+#| label: add-vaccine
 add_tool(model_sirconn, vaccine_tool)
 
-## ----run-model-vaccine--------------------------------------------------------
+
+## -----------------------------------------------------------------------------
+#| label: run-model-vaccine
 run(model_sirconn, ndays = 50, seed = 1912)
 plot(model_sirconn)
 
-## ----set-events---------------------------------------------------------------
+
+## -----------------------------------------------------------------------------
+#| label: set-events
 isolation_day_10 <- globalevent_set_params("Contact rate", 2, day = 10)
 advertisement_day_20 <- globalevent_set_params("Contact rate", 1.5, day = 20)
 
-## ----add-events---------------------------------------------------------------
+
+## -----------------------------------------------------------------------------
+#| label: add-events
 add_globalevent(model_sirconn, isolation_day_10)
 add_globalevent(model_sirconn, advertisement_day_20)
 
-## ----run-full-model-----------------------------------------------------------
+
+## -----------------------------------------------------------------------------
+#| label: run-full-model
 run(model_sirconn, ndays = 50, seed = 1912)
 plot(model_sirconn)
 
-## ----model-summary------------------------------------------------------------
+
+## -----------------------------------------------------------------------------
+#| label: model-summary
 summary(model_sirconn)
 
-## ----reproductive-numbers-----------------------------------------------------
+
+## -----------------------------------------------------------------------------
+#| label: reproductive-numbers
 repnum2 <- get_reproductive_number(model_sirconn)
 plot(repnum2, type = "b")
 

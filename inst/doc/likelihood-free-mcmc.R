@@ -1,11 +1,5 @@
-## ----setup, include = FALSE---------------------------------------------------
-knitr::opts_chunk$set(
-  collapse = TRUE,
-  comment = "#>", out.width = "80%", fig.width = 7, fig.height = 5,
-  fig.align = "center"
-)
-
-## ----setup-sir----------------------------------------------------------------
+## -----------------------------------------------------------------------------
+#| label: setup-sir
 library(epiworldR)
 
 model_seed <- 122
@@ -25,7 +19,9 @@ agents_smallworld(
   p = 0.01
 )
 
-## ----run-sir------------------------------------------------------------------
+
+## -----------------------------------------------------------------------------
+#| label: run-sir
 verbose_off(model_sir)
 
 run(
@@ -36,10 +32,14 @@ run(
 
 summary(model_sir)
 
-## ----get-sir-model-data-------------------------------------------------------
+
+## -----------------------------------------------------------------------------
+#| label: get-sir-model-data
 model_sir_data <- get_today_total(model_sir)
 
-## ----simfun-------------------------------------------------------------------
+
+## -----------------------------------------------------------------------------
+#| label: simfun
 simulation_fun <- function(params, lfmcmc_obj) {
 
   set_param(model_sir, "Recovery rate", params[1])
@@ -54,18 +54,24 @@ simulation_fun <- function(params, lfmcmc_obj) {
 
 }
 
-## ----sumfun-------------------------------------------------------------------
+
+## -----------------------------------------------------------------------------
+#| label: sumfun
 summary_fun <- function(data, lfmcmc_obj) {
   return(data)
 }
 
-## ----propfun------------------------------------------------------------------
+
+## -----------------------------------------------------------------------------
+#| label: propfun
 proposal_fun <- function(old_params, lfmcmc_obj) {
   res <- plogis(qlogis(old_params) + rnorm(length(old_params), sd = .1))
   return(res)
 }
 
-## ----kernfun------------------------------------------------------------------
+
+## -----------------------------------------------------------------------------
+#| label: kernfun
 kernel_fun <- function(
   simulated_stats, observed_stats, epsilon, lfmcmc_obj
 ) {
@@ -75,7 +81,9 @@ kernel_fun <- function(
 
 }
 
-## ----lfmcmc-setup-------------------------------------------------------------
+
+## -----------------------------------------------------------------------------
+#| label: lfmcmc-setup
 lfmcmc_model <- LFMCMC(model_sir) |>
   set_simulation_fun(simulation_fun) |>
   set_summary_fun(summary_fun) |>
@@ -83,7 +91,9 @@ lfmcmc_model <- LFMCMC(model_sir) |>
   set_kernel_fun(kernel_fun) |>
   set_observed_data(model_sir_data)
 
-## ----lfmcmc-run---------------------------------------------------------------
+
+## -----------------------------------------------------------------------------
+#| label: lfmcmc-run
 initial_params <- c(0.3, 0.3)
 epsilon <- 1.0
 n_samples <- 2000
@@ -97,13 +107,17 @@ run_lfmcmc(
   seed = model_seed
 )
 
-## ----lfmcmc-print-------------------------------------------------------------
+
+## -----------------------------------------------------------------------------
+#| label: lfmcmc-print
 set_params_names(lfmcmc_model, c("Recovery rate", "Transmission rate"))
 set_stats_names(lfmcmc_model, get_states(model_sir))
 
 print(lfmcmc_model, burnin = 1500)
 
-## ----post-dist----------------------------------------------------------------
+
+## -----------------------------------------------------------------------------
+#| label: post-dist
 # Extracting the accepted parameters
 accepted <- get_all_accepted_params(lfmcmc_model)
 

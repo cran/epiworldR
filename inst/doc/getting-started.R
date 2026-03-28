@@ -1,11 +1,5 @@
-## ----setup, include = FALSE---------------------------------------------------
-knitr::opts_chunk$set(
-  collapse = TRUE,
-  comment = "#>", out.width = "80%", fig.width = 7, fig.height = 5,
-  fig.align = "center"
-)
-
-## ----sirconn-setup------------------------------------------------------------
+## -----------------------------------------------------------------------------
+#| label: sirconn-setup
 library(epiworldR)
 model_sir <- ModelSIRCONN(
   name              = "COVID-19",
@@ -19,47 +13,68 @@ model_sir <- ModelSIRCONN(
 # Printing the model
 model_sir
 
-## ----summary-method-----------------------------------------------------------
+
+## -----------------------------------------------------------------------------
+#| label: summary-method
 summary(model_sir)
+
 
 ## -----------------------------------------------------------------------------
 run(model_sir, ndays = 50, seed = 1912)
 summary(model_sir)
 
-## ----getting-totals, echo=FALSE-----------------------------------------------
+
+## -----------------------------------------------------------------------------
+#| label: getting-totals
+#| echo: false
 initials <- get_hist_total(model_sir)[1:3, ]$counts |> prettyNum(big.mark = ",")
 finals   <- get_today_total(model_sir) |> prettyNum(big.mark = ",")
 tmat     <- get_transition_probability(model_sir)
 tmat     <- round(tmat, digits = 2)
 
-## ----generate-diagram---------------------------------------------------------
+
+## -----------------------------------------------------------------------------
+#| label: generate-diagram
 diagram <- draw_mermaid(model_sir)
 print(diagram)
 
-## ----mermaid-diagram----------------------------------------------------------
+
+## -----------------------------------------------------------------------------
+#| label: mermaid-diagram
 plot(diagram)
 
-## ----showing-methods----------------------------------------------------------
+
+## -----------------------------------------------------------------------------
+#| label: showing-methods
 methods(class = "epiworld_model")
+
 
 ## -----------------------------------------------------------------------------
 plot(model_sir)
 
-## ----get-hist-total-----------------------------------------------------------
+
+## -----------------------------------------------------------------------------
+#| label: get-hist-total
 head(get_hist_total(model_sir))
 
-## ----repnum-------------------------------------------------------------------
+
+## -----------------------------------------------------------------------------
+#| label: repnum
 repnum <- get_reproductive_number(model_sir)
 head(repnum)
+
 
 ## -----------------------------------------------------------------------------
 x <- plot(repnum, type = "b")
 subset(x, date == 10) # Reproductive number on day 10
 
+
 ## -----------------------------------------------------------------------------
 plot_incidence(model_sir)
 
-## ----design-and-add-----------------------------------------------------------
+
+## -----------------------------------------------------------------------------
+#| label: design-and-add
 # Building the virus
 flu <- virus(
   name = "Flu", prob_infecting = .3,
@@ -69,17 +84,21 @@ flu <- virus(
 # Adding the virus to the model
 add_virus(model_sir, flu)
 
+
 ## -----------------------------------------------------------------------------
 run(model_sir, ndays = 50, seed = 1912)
 model_sir
 
-## ----fig.height=10------------------------------------------------------------
+
+## -----------------------------------------------------------------------------
+#| fig-height: 10
 repnum2 <- get_reproductive_number(model_sir)
 
 op <- par(mfrow = c(2, 1))
 plot(model_sir)
 plot(repnum2, type = "b")
 par(op)
+
 
 ## -----------------------------------------------------------------------------
 # Removing the flu virus from the model
@@ -98,7 +117,10 @@ vaccine <- tool(
 add_tool(model_sir, vaccine)
 run(model_sir, ndays = 50, seed = 1231)
 
-## ----curves-including-vaccine, fig.height=10----------------------------------
+
+## -----------------------------------------------------------------------------
+#| label: curves-including-vaccine
+#| fig-height: 10
 repnum3 <- get_reproductive_number(model_sir)
 
 op <- par(mfrow = c(2, 1))

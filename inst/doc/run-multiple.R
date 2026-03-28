@@ -1,11 +1,5 @@
-## ----setup, include = FALSE---------------------------------------------------
-knitr::opts_chunk$set(
-  collapse = TRUE,
-  comment = "#>", out.width = "80%", fig.width = 7, fig.height = 5,
-  fig.align = "center"
-)
-
-## ----sirconn-setup------------------------------------------------------------
+## -----------------------------------------------------------------------------
+#| label: sirconn-setup
 library(epiworldR)
 model_seirconn <- ModelSEIRCONN(
   name              = "COVID-19",
@@ -17,24 +11,32 @@ model_seirconn <- ModelSEIRCONN(
   recovery_rate     = 1 / 3
 )
 
-## ----saver-generation---------------------------------------------------------
+
+## -----------------------------------------------------------------------------
+#| label: saver-generation
 # Generating a saver
 saver <- make_saver("total_hist", "reproductive")
 # Running and printing
 run_multiple(model_seirconn, ndays = 50, nsims = 50, saver = saver, nthreads = 2)
 
-## ----retrieving results-------------------------------------------------------
+
+## -----------------------------------------------------------------------------
+#| label: retrieving-results
 # Retrieving the results
 ans <- run_multiple_get_results(model_seirconn, nthreads = 2)
 head(ans$total_hist)
 head(ans$reproductive)
 
-## ----plotting seirconn epicurves----------------------------------------------
+
+## -----------------------------------------------------------------------------
+#| label: plotting-seirconn-epicurves
 seirconn_50 <- ans$total_hist
 seirconn_50 <- seirconn_50[seirconn_50$date <= 20, ]
 plot(seirconn_50)
 
-## ----reproductive number plot-------------------------------------------------
+
+## -----------------------------------------------------------------------------
+#| label: reproductive-number-plot
 seirconn_50_r <- ans$reproductive
 plot(seirconn_50_r)
 # boxplot(rt ~ source_exposure_date, data = seirconn_50_r,

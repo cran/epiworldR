@@ -1,11 +1,5 @@
-## ----setup, include = FALSE---------------------------------------------------
-knitr::opts_chunk$set(
-  collapse = TRUE,
-  comment = "#>", out.width = "80%", fig.width = 7, fig.height = 5,
-  fig.align = "center"
-)
-
-## ----entity-matrix-setup------------------------------------------------------
+## -----------------------------------------------------------------------------
+#| label: entity-matrix-setup
 library(epiworldR)
 
 e1 <- entity("Population 1", 3e3, as_proportion = FALSE)
@@ -19,7 +13,9 @@ cmatrix <- c(
   c(0.1, 0.2, 0.7)
 ) |> matrix(byrow = TRUE, nrow = 3)
 
-## ----model-build--------------------------------------------------------------
+
+## -----------------------------------------------------------------------------
+#| label: model-build
 N <- 9e3
 
 flu_model <- ModelSEIRMixing(
@@ -39,13 +35,18 @@ flu_model |>
   add_entity(e2) |>
   add_entity(e3)
 
-## ----model-simulate-----------------------------------------------------------
+
+## -----------------------------------------------------------------------------
+#| label: model-simulate
 set.seed(331)
 run(flu_model, ndays = 100)
 summary(flu_model)
 plot_incidence(flu_model)
 
-## ----investigate, eval=TRUE---------------------------------------------------
+
+## -----------------------------------------------------------------------------
+#| label: investigate
+#| eval: true
 library(data.table)
 
 agents_entities <- lapply(get_entities(flu_model), \(e) {
@@ -54,7 +55,9 @@ agents_entities <- lapply(get_entities(flu_model), \(e) {
 
 head(agents_entities)
 
-## ----transmissions------------------------------------------------------------
+
+## -----------------------------------------------------------------------------
+#| label: transmissions
 # Retrieving the transmissions
 transmissions <- get_transmissions(flu_model) |>
   data.table()
@@ -78,7 +81,9 @@ transmissions <- transmissions[, .N, by = .(date, entity)]
 # Taking a look at the data
 head(transmissions)
 
-## ----transmissions-plot-------------------------------------------------------
+
+## -----------------------------------------------------------------------------
+#| label: transmissions-plot
 setorder(transmissions, date, entity)
 
 ran <- range(transmissions$N)
